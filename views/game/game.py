@@ -1,8 +1,10 @@
 import arcade
 from views.game.player import Player
 from views.game.bullet import Bullet
+from views.game.enemy import Enemy
 import utils.flags
 from utils.loader import assets
+from utils.flags import bullets
 
 
 class randomView(arcade.View):
@@ -24,9 +26,12 @@ class GameView(arcade.View):
         self.player = Player()
         self.flags = utils.flags.keyFlags()
         self.uptime = 0
+
         self.lastShotTime = -9999
-        self.bullets = []
-        self.bulletDelay=0.2
+        self.bulletDelay = 0.2
+
+        self.lastEnemySpawnTime=-9999
+        self.enemySpawnDelay=4
 
     def on_show(self):
         arcade.set_background_color(arcade.color.WHITE)
@@ -35,22 +40,24 @@ class GameView(arcade.View):
     def on_draw(self):
         arcade.start_render()
         self.player.draw()
-        [b.draw() for b in self.bullets]
+        [b.draw() for b in bullets]
 
     def on_update(self, deltaTime):
         self.uptime += deltaTime
 
         self.player.update(self.flags)
-        for b in self.bullets:
-            b.update()
-            if b.position[0]>700 or b.position[1]>700:
-                self.bullets.remove(b)
+        [b.update() for b in bullets]
 
         if self.flags.space:
-            if (self.lastShotTime+self.bulletDelay<self.uptime):
-                self.lastShotTime=self.uptime
-                self.bullets.append(Bullet(self.player.position,0,10))
-                
+            if (self.lastShotTime+self.bulletDelay < self.uptime):
+                self.lastShotTime = self.uptime
+                bullets.append(Bullet(self.player.position, 0, 10))
+
+        # remove old bullets
+        for b in bullets:
+            if b.position[0] > 700 or b.position[1] > 700:
+                bullets.remove(b)
+                del b
 
     def on_mouse_press(self, _x, _y, _button, _modifiers):
         # arcade.close_window()

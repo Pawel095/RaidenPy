@@ -5,3 +5,5 @@ class keyFlags():
         self.up = False
         self.down = False
         self.space=False
+
+bullets=[]
