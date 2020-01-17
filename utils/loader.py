@@ -1,16 +1,36 @@
 import arcade
+import threading
+
+assets = {}
+loadingFinished = False
 
 
-class loader():
-    def __init__(self):
-        self.data = {}
+class worker(threading.Thread):
+    def __init__(self, loadFunc, path, key):
+        super().__init__()
+        self.loadFunc = loadFunc
+        self.path = path
+        self.key = key
 
+    def run(self):
+        assets[self.key]=self.loadFunc(self.path)
+
+
+class Loader():
     def load(self):
-        self.data["defcon0"] = arcade.load_sound("assets/Defcon_Zero.wav")
+        threads = []
+        threads.append(
+            worker(arcade.load_sound, "assets/Defcon_Zero.wav", "defcon0"))
+        [t.start() for t in threads]
+        [t.join() for t in threads]
+        loadingFinished = True
+
+        if loadingFinished:
+            pass
 
     def get(self, key):
         try:
-            ret = self.data[key]
+            ret = assets[key]
         except KeyError as e:
             print(e)
         else:
