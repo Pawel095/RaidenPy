@@ -2,7 +2,7 @@ import arcade
 from utils.utilFunctions import approach
 
 class Player(arcade.Sprite):
-    def __init__(self, speed=10, spritePath=None):
+    def __init__(self, speed=10,slowModifier=0.1, spritePath=None):
         super().__init__(spritePath)
         self.speed = speed
 

@@ -1,6 +1,20 @@
 import arcade
 from views.game.player import Player
 import utils.flags
+from utils.loader import assets
+
+
+class randomView(arcade.View):
+    def on_show(self):
+        arcade.set_background_color(arcade.color.BLACK)
+
+    def on_draw(self):
+        arcade.start_render()
+        arcade.draw_text("Game Over - press ESCAPE to advance",
+                         300, 300, arcade.color.WHITE, 20, anchor_x="center")
+
+    def on_mouse_press(self, _x, _y, _button, _modifiers):
+        arcade.close_window()
 
 
 class GameView(arcade.View):
@@ -11,8 +25,7 @@ class GameView(arcade.View):
 
     def on_show(self):
         arcade.set_background_color(arcade.color.WHITE)
-        # defcon0 = arcade.load_sound("assets/Defcon_Zero.wav")
-        # arcade.play_sound(defcon0)
+        arcade.play_sound(assets["defcon0"])
 
     def on_draw(self):
         arcade.start_render()
@@ -22,7 +35,9 @@ class GameView(arcade.View):
         self.ball.update(self.flags)
 
     def on_mouse_press(self, _x, _y, _button, _modifiers):
-        arcade.close_window()
+        # arcade.close_window()
+        rv = randomView()
+        self.window.show_view(rv)
 
     def on_key_press(self, key, modifiers):
         """ Called whenever the user presses a key. """
