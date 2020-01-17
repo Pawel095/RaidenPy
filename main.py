@@ -1,13 +1,13 @@
 import arcade
-from game import MenuView
+from views.game.game import GameView
 
 WIDTH = 600
 HEIGHT = 600
 
 def main():
     window = arcade.Window(WIDTH, HEIGHT, "DEBUG SHA!^")
-    menu_view = MenuView()
-    window.show_view(menu_view)
+    game_view = GameView()
+    window.show_view(game_view)
     arcade.run()
 
 
