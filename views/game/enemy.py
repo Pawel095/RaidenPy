@@ -1,6 +1,7 @@
 import arcade
 from views.game.bullet import Bullet
-from utils.globals import bullets
+# from utils.globals import bullets
+import utils.globals
 import random
 from utils.utilFunctions import getDist, approach, clamp
 import math

@@ -1,18 +1,22 @@
 import arcade
-from views.game.game import GameView
+import utils.globals
 from utils.loader import Loader
+import utils.views
+
+
+
 
 WIDTH = 600
 HEIGHT = 600
 
+
+
 def main():
-    window = arcade.Window(WIDTH, HEIGHT, "DEBUG SHA!^")
+    utils.globals.WINDOW = arcade.Window(utils.globals.SCREEN_WIDTH, utils.globals.SCREEN_HEIGHT, utils.globals.SCREEN_TITLE)
     l = Loader()
-    print("load Start")
     l.load()
-    print("load End")
-    game_view = GameView()
-    window.show_view(game_view)
+    
+    utils.globals.WINDOW.show_view(utils.views.main_menu)
     arcade.run()
 
 
