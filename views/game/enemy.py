@@ -1,7 +1,7 @@
 import arcade
 from views.game.bullet import Bullet
 from views.game.explosion import Explosion
-from utils.globals import enemyBullets, player, explosions
+from utils.globals import enemyBullets, explosions
 from utils.loader import assets
 import random
 from utils.utilFunctions import getDist, approach, clamp
@@ -11,14 +11,10 @@ import math
 class Enemy(arcade.Sprite):
     """ ma lecieć do losowego koorda>=200, obracać się w strone gracza i szczelać. bullety spawnowane tutaj"""
 
-    def __init__(self, scale=1):
+    def __init__(self,player, scale=1):
         super().__init__(None)
-        self._texture = assets["enemy1"]
-        if self._texture:
-            self.textures = [self._texture]
-            self._width = self._texture.width*scale
-            self._height = self._texture.height*scale
-            self._texture.scale = scale
+        self.texture = assets["enemy1"]
+        self.player = player
 
         self.hp = 2
 
@@ -36,8 +32,9 @@ class Enemy(arcade.Sprite):
         # self.position = [300,300]
 
         self.lookDirection = 0
-        self.speed = 5
+        self.speed = 20
         self.bulletSpeed = 5
+
         self.maxDistX = math.sqrt(
             math.pow(self.position[0]-self.target[0], 2))+1e-3
         self.maxDistY = math.sqrt(
@@ -50,8 +47,8 @@ class Enemy(arcade.Sprite):
         if getDist(self.position, self.target) < 70:
             # stój i strzelaj,obracając się w sron gracza
 
-            pX = (player.position[0]-self.position[0])
-            pY = (player.position[1]-self.position[1])
+            pX = (self.player.position[0]-self.position[0])
+            pY = (self.player.position[1]-self.position[1])
             pAngle = math.atan2(pY, pX)
             targetAngle = math.degrees(pAngle)-90
             if self.lastShotTime+self.shotCooldown < uptime:
@@ -60,7 +57,7 @@ class Enemy(arcade.Sprite):
                 bY = math.sin(pAngle)
 
                 enemyBullets.append(
-                    Bullet(self.position, bX*self.speed, bY*self.speed, angle=math.degrees(pAngle)-90, color="r"))
+                    Bullet(self.position, bX*self.bulletSpeed, bY*self.bulletSpeed, angle=math.degrees(pAngle)-90, color="r"))
         else:
             # leć do target
             wX = self.target[0]-self.position[0]

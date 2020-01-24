@@ -1,4 +1,3 @@
-from views.game.player import Player
 import arcade
 from utils.loader import Loader
 
@@ -22,7 +21,5 @@ enemyBullets = arcade.SpriteList()
 playerBullets = arcade.SpriteList()
 enemies = arcade.SpriteList()
 explosions = arcade.SpriteList()
-
-player = Player()
 
 

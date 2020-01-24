@@ -1,6 +1,8 @@
 import arcade
 from utils.utilFunctions import approach,clampToScreen
 from utils.loader import assets
+from utils.globals import explosions
+from views.game.explosion import Explosion
 
 
 class Player(arcade.Sprite):
@@ -9,18 +11,15 @@ class Player(arcade.Sprite):
         self.set_position(100, 100)
         self.speed = speed
         self.collision_radius = 100
-        self._texture = assets["player"]
-        if self._texture:
-            self.textures = [self._texture]
-            self._width = self._texture.width*scale
-            self._height = self._texture.height*scale
-            self._texture.scale = scale
+        self.texture = assets["player"]
+        self.scale = scale
+        self.alive=True
 
     def draw(self):
         super().draw()
     
     def onHit(self):
-        pass
+        explosions.append(Explosion(self.position,2))
 
     def update(self, flags):
         deltaX = 0
