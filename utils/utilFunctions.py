@@ -28,3 +28,21 @@ def isRemoveable(pos):
     if pos[1] > 0-100 and pos[1] < HEIGHT+100:
         y = True
     return x and y
+
+
+def clampToScreen(sprite):
+    from utils.globals import WIDTH, HEIGHT
+
+    if not sprite.left > 0:
+        sprite.position[0] = 0 + sprite.width/2 + 1
+
+    if not sprite.right < WIDTH:
+        sprite.position[0] = WIDTH - sprite.width/2 - 1
+
+    if not sprite.bottom > 0:
+        sprite.position[1] = 0 + sprite.height/2 + 1
+
+    if not sprite.top < HEIGHT:
+        sprite.position[1] = HEIGHT - sprite.height/2 - 1
+
+    return

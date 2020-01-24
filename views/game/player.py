@@ -1,5 +1,5 @@
 import arcade
-from utils.utilFunctions import approach
+from utils.utilFunctions import approach,clampToScreen
 from utils.loader import assets
 
 
@@ -38,3 +38,4 @@ class Player(arcade.Sprite):
         self.change_x = approach(self.change_x, deltaX, 0.1)
         self.change_y = approach(self.change_y, deltaY, 0.1)
         super().update()
+        clampToScreen(self)
