@@ -1,6 +1,6 @@
 import arcade
 from views.game.game import GameView
-from utils.loader import Loader,assets
+from utils.loader import Loader
 
 WIDTH = 600
 HEIGHT = 600
