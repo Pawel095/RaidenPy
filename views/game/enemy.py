@@ -18,8 +18,16 @@ class Enemy(arcade.Sprite):
             self._width = self._texture.width*scale
             self._height = self._texture.height*scale
             self._texture.scale = scale
+
+        self.hp=2
+
         self.lastShotTime = 0
         self.shotCooldown = 2
+
+        self.lastBlinkTriggerTime = 0
+        self.blinkTime = 0.5
+        self.blinkStatus = False
+        self._blinker = 0
 
         self.target = [random.randint(100, 500), random.randint(100, 500)]
         self.position = [random.randint(0, 600), 500]
@@ -51,7 +59,7 @@ class Enemy(arcade.Sprite):
                 bY = math.sin(pAngle)
 
                 enemyBullets.append(
-                    Bullet(self.position, bX*self.speed, bY*self.speed, angle=math.degrees(pAngle)-90,color="r"))
+                    Bullet(self.position, bX*self.speed, bY*self.speed, angle=math.degrees(pAngle)-90, color="r"))
         else:
             # leć do target
             wX = self.target[0]-self.position[0]
@@ -65,10 +73,30 @@ class Enemy(arcade.Sprite):
         self.change_x = approach(self.change_x, speedX, 0.1)
         self.change_y = approach(self.change_y, speedY, 0.1)
         self.angle = approach(self.angle, targetAngle, 0.1)
+
+        if self.blinkTime+self.lastBlinkTriggerTime < uptime:
+            self.blinkStatus = False
+            self._blinker = 0
+
+        if self.hp<=0:
+            self.kill()
+
         super().update()
 
-    def onHit(self):
-        pass
+    def onHit(self, uptime):
+        if not self.blinkStatus:
+            self.blinkStatus = True
+            self.lastBlinkTriggerTime = uptime
+            self.hp-=1
+
+    def kill(self):
+        super().kill()
+        
 
     def draw(self):
-        super().draw()
+        if self.blinkStatus:
+            self._blinker += 1
+            if self._blinker % 3 == 0:
+                super().draw()
+        else:
+            super().draw()
