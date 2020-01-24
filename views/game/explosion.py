@@ -4,15 +4,15 @@ import math
 
 
 class Explosion(arcade.Sprite):
-    def __init__(self, scale=2):
+    def __init__(self,position=[0,0], scale=2):
         super().__init__()
+        self.position = position
         self.current_texture = 0
         self.textures = assets["explosion"]
         for t in self.textures:
             t.scale = scale
         
         self.texture = self.textures[0]
-        self.position = [300, 300]
         self.scale = scale
         # 16 fps
         self.deltaFrame = 0.0625

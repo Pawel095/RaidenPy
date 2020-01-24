@@ -32,7 +32,7 @@ class GameView(arcade.View):
         self.bulletDelay = 0.2
 
         self.lastEnemySpawnTime = -9999
-        self.enemySpawnDelay = 4
+        self.enemySpawnDelay = 2
 
     def on_show(self):
         arcade.set_background_color(arcade.color.WHITE)

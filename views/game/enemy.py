@@ -1,6 +1,7 @@
 import arcade
 from views.game.bullet import Bullet
-from utils.globals import enemyBullets, player
+from views.game.explosion import Explosion
+from utils.globals import enemyBullets, player, explosions
 from utils.loader import assets
 import random
 from utils.utilFunctions import getDist, approach, clamp
@@ -19,7 +20,7 @@ class Enemy(arcade.Sprite):
             self._height = self._texture.height*scale
             self._texture.scale = scale
 
-        self.hp=2
+        self.hp = 2
 
         self.lastShotTime = 0
         self.shotCooldown = 2
@@ -30,7 +31,7 @@ class Enemy(arcade.Sprite):
         self._blinker = 0
 
         self.target = [random.randint(100, 500), random.randint(100, 500)]
-        self.position = [random.randint(0, 600), 500]
+        self.position = [random.randint(0, 600), 700]
         # self.target = [300,300]
         # self.position = [300,300]
 
@@ -78,7 +79,7 @@ class Enemy(arcade.Sprite):
             self.blinkStatus = False
             self._blinker = 0
 
-        if self.hp<=0:
+        if self.hp <= 0:
             self.kill()
 
         super().update()
@@ -87,11 +88,11 @@ class Enemy(arcade.Sprite):
         if not self.blinkStatus:
             self.blinkStatus = True
             self.lastBlinkTriggerTime = uptime
-            self.hp-=1
+            self.hp -= 1
 
     def kill(self):
+        explosions.append(Explosion(self.position,scale=3))
         super().kill()
-        
 
     def draw(self):
         if self.blinkStatus:
