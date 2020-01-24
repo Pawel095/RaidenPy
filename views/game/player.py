@@ -18,6 +18,9 @@ class Player(arcade.Sprite):
 
     def draw(self):
         super().draw()
+    
+    def onHit(self):
+        pass
 
     def update(self, flags):
         deltaX = 0
