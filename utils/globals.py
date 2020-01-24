@@ -21,6 +21,8 @@ print("load End")
 enemyBullets = arcade.SpriteList()
 playerBullets = arcade.SpriteList()
 enemies = arcade.SpriteList()
+explosions = arcade.SpriteList()
+
 player = Player()
 
 
