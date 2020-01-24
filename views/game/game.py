@@ -4,7 +4,7 @@ from views.game.bullet import Bullet
 from views.game.enemy import Enemy
 import utils.globals
 from utils.loader import assets
-from utils.globals import bullets, enemies
+from utils.globals import bullets, enemies,player
 
 
 class randomView(arcade.View):
@@ -23,7 +23,6 @@ class randomView(arcade.View):
 class GameView(arcade.View):
     def __init__(self):
         super().__init__()
-        self.player = Player()
         self.flags = utils.globals.keyFlags()
         self.uptime = 0
 
@@ -39,22 +38,22 @@ class GameView(arcade.View):
 
     def on_draw(self):
         arcade.start_render()
-        self.player.draw()
+        player.draw()
         [b.draw() for b in bullets]
         [e.draw() for e in enemies]
 
     def on_update(self, deltaTime):
         self.uptime += deltaTime
 
-        self.player.update(self.flags)
+        player.update(self.flags)
         [b.update() for b in bullets]
         [e.update(self.uptime) for e in enemies]
 
-        # player shhoting
+        # player shoting
         if self.flags.space:
             if (self.lastShotTime+self.bulletDelay < self.uptime):
                 self.lastShotTime = self.uptime
-                bullets.append(Bullet(self.player.position, 0, 10))
+                bullets.append(Bullet(player.position, 0, 10))
 
         # spawn enemies
         if self.lastEnemySpawnTime+self.enemySpawnDelay < self.uptime:

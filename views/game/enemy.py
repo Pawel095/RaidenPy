@@ -11,32 +11,43 @@ class Enemy(arcade.Sprite):
 
     def __init__(self):
         super().__init__(None)
-        # bullets.append(Bullet([200, 200], 0, 1, color=arcade.color.JAPANESE_INDIGO))
         print("spawning enemy")
-        self.lastShotTime = -9999
+        self.lastShotTime = 0
         self.shotCooldown = 2
-        self.target = [random.randint(100, 500), random.randint(100, 500)]
+        self.target = [random.randint(300, 500), random.randint(300, 500)]
         self.lookDirection = 0
-        self.position = [100, 100]
+        self.position = [random.randint(0,600),700]
         self.speed = 5
         self.maxDist = getDist(self.position, self.target)
+        self.maxDistX = math.sqrt(
+            math.pow(self.position[0]-self.target[0], 2))+1e-3
+        self.maxDistY = math.sqrt(
+            math.pow(self.position[1]-self.target[1], 2))+1e-3
 
     def update(self, uptime):
-        if getDist(self.position, self.target) < 100:
-            if uptime+self.shotCooldown < self.lastShotTime:
+        speedX = 0
+        speedY = 0
+        if getDist(self.position, self.target) < 70:
+            if self.lastShotTime+self.shotCooldown < uptime:
                 self.lastShotTime = uptime
-                print("SHOT!")
+                
         else:
             # leć do target
-            # approach(self.position[0], self.target[0], 0.1)
-            wX = math.sqrt(math.pow(self.position[0]-self.target[0], 2))
-            wY = math.sqrt(math.pow(self.position[1]-self.target[1], 2))
+            # wektor do celu
+            wX = self.target[0]-self.position[0]
+            wY = self.target[1]-self.position[1]
 
-            # self.change_x = deltaX
-            # self.change_y = deltaY
-            super().update()
-            pass
+            speedX = (wX/self.maxDistX)*self.speed
+            speedY = (wY/self.maxDistY)*self.speed
+
+        self.change_x = approach(self.change_x, speedX, 0.1)
+        self.change_y = approach(self.change_y, speedY, 0.1)
+        super().update()
 
     def draw(self):
+        # debugLine
+        arcade.draw_line(self.position[0], self.position[1],
+                         self.target[0], self.target[1], arcade.color.DARK_BLUE)
+
         arcade.draw_rectangle_filled(
             self.position[0], self.position[1], 50, 50, arcade.color.DARK_BLUE, self.position[1])

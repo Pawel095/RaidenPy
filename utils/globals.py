@@ -1,3 +1,5 @@
+from views.game.player import Player
+
 class keyFlags():
     def __init__(self):
         self.left = False
@@ -9,3 +11,4 @@ class keyFlags():
 
 bullets = []
 enemies = []
+player = Player()
