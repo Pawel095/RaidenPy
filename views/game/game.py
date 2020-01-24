@@ -59,7 +59,7 @@ class GameView(arcade.View):
         if self.flags.space:
             if (self.lastShotTime+self.bulletDelay < self.uptime):
                 self.lastShotTime = self.uptime
-                playerBullets.append(Bullet(player.position, 0, 10))
+                playerBullets.append(Bullet(player.position, 0, 10, 90))
 
         # spawn enemies
         if self.lastEnemySpawnTime+self.enemySpawnDelay < self.uptime:
