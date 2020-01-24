@@ -2,10 +2,11 @@ import arcade
 from views.game.player import Player
 from views.game.bullet import Bullet
 from views.game.enemy import Enemy
+from views.game.explosion import Explosion
 import utils.globals
-from utils.utilFunctions import isOnScreen
+from utils.utilFunctions import isRemoveable
 from utils.loader import assets
-from utils.globals import enemyBullets, playerBullets, enemies, player
+from utils.globals import enemyBullets, playerBullets, enemies, player,explosions
 
 
 class randomView(arcade.View):
@@ -43,16 +44,20 @@ class GameView(arcade.View):
         [b.draw() for b in enemyBullets]
         [b.draw() for b in playerBullets]
         [e.draw() for e in enemies]
+        explosions.draw()
 
     def on_update(self, deltaTime):
         self.uptime += deltaTime
 
         player.update(self.flags)
-        [b.update() for b in playerBullets]
-        [b.update() for b in enemyBullets]
+        # [b.update() for b in playerBullets]
+        playerBullets.update()
+        # [b.update() for b in enemyBullets]
+        enemyBullets.update()
         [e.update(self.uptime) for e in enemies]
+        [e.update(deltaTime) for e in explosions]
 
-        # player is shot
+        # player is shot?
         colided = arcade.check_for_collision_with_list(player, enemyBullets)
         if len(colided) > 0:
             for c in colided:
@@ -65,6 +70,7 @@ class GameView(arcade.View):
             if len(colided) > 0:
                 for c in colided:
                     c.kill()
+                    e.onHit(self.uptime)
 
         # player shoting
         if self.flags.space:
@@ -79,19 +85,17 @@ class GameView(arcade.View):
 
         # remove old enemy Bullets bullets
         for b in enemyBullets:
-            if not isOnScreen(b.position):
+            if not isRemoveable(b.position):
                 enemyBullets.remove(b)
                 del b
         # remove old player bullets
         for b in playerBullets:
-            if not isOnScreen(b.position):
+            if not isRemoveable(b.position):
                 playerBullets.remove(b)
                 del b
 
     def on_mouse_press(self, _x, _y, _button, _modifiers):
-        # arcade.close_window()
-        # rv = randomView()
-        # self.window.show_view(rv)
+        explosions.append(Explosion())
         pass
 
     def on_key_press(self, key, modifiers):

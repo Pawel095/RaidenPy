@@ -19,7 +19,7 @@ def clamp(val, maxv, minv=0):
     return ret
 
 
-def isOnScreen(pos):
+def isRemoveable(pos):
     from utils.globals import WIDTH, HEIGHT
     x = False
     y = False
