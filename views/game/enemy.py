@@ -1,6 +1,6 @@
 import arcade
 from views.game.bullet import Bullet
-from utils.globals import bullets, player
+from utils.globals import enemyBullets, player
 import random
 from utils.utilFunctions import getDist, approach, clamp
 import math
@@ -11,7 +11,6 @@ class Enemy(arcade.Sprite):
 
     def __init__(self):
         super().__init__(None)
-        print("spawning enemy")
         self.lastShotTime = 0
         self.shotCooldown = 2
 
@@ -37,8 +36,8 @@ class Enemy(arcade.Sprite):
                 self.lastShotTime = uptime
                 pX = (player.position[0]-self.position[0])/self.bulletSlow
                 pY = (player.position[1]-self.position[1])/self.bulletSlow
-                bullets.append(Bullet(self.position, pX, pY))
-
+                enemyBullets.append(
+                    Bullet(self.position, pX, pY, angle=math.degrees(math.atan(pY/pX))))
         else:
             # leć do target
             wX = self.target[0]-self.position[0]
