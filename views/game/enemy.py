@@ -1,6 +1,6 @@
 import arcade
 from views.game.bullet import Bullet
-from utils.globals import bullets
+from utils.globals import bullets, player
 import random
 from utils.utilFunctions import getDist, approach, clamp
 import math
@@ -14,10 +14,14 @@ class Enemy(arcade.Sprite):
         print("spawning enemy")
         self.lastShotTime = 0
         self.shotCooldown = 2
+
         self.target = [random.randint(300, 500), random.randint(300, 500)]
+        self.position = [random.randint(0, 600), 700]
+
         self.lookDirection = 0
-        self.position = [random.randint(0,600),700]
         self.speed = 5
+        self.bulletSlow = 100
+
         self.maxDist = getDist(self.position, self.target)
         self.maxDistX = math.sqrt(
             math.pow(self.position[0]-self.target[0], 2))+1e-3
@@ -28,12 +32,15 @@ class Enemy(arcade.Sprite):
         speedX = 0
         speedY = 0
         if getDist(self.position, self.target) < 70:
+            # stój i strzelaj
             if self.lastShotTime+self.shotCooldown < uptime:
                 self.lastShotTime = uptime
-                
+                pX = (player.position[0]-self.position[0])/self.bulletSlow
+                pY = (player.position[1]-self.position[1])/self.bulletSlow
+                bullets.append(Bullet(self.position, pX, pY))
+
         else:
             # leć do target
-            # wektor do celu
             wX = self.target[0]-self.position[0]
             wY = self.target[1]-self.position[1]
 
