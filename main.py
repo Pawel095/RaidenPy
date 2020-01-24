@@ -1,9 +1,9 @@
 import arcade
 from views.game.game import GameView
 from utils.loader import Loader
+from utils.globals import WIDTH,HEIGHT
 
-WIDTH = 600
-HEIGHT = 600
+
 
 def main():
     window = arcade.Window(WIDTH, HEIGHT, "DEBUG SHA!^")
