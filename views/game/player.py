@@ -1,14 +1,26 @@
 import arcade
 from utils.utilFunctions import approach
+from utils.loader import assets
+
 
 class Player(arcade.Sprite):
-    def __init__(self, speed=10,slowModifier=0.1, spritePath=None):
-        super().__init__(spritePath)
+    def __init__(self, speed=10, slowModifier=0.1,  scale=0.5):
+        super().__init__(None)
+        self.set_position(100, 100)
         self.speed = speed
+        self.collision_radius = 100
+        self._texture = assets["player"]
+        if self._texture:
+            self.textures = [self._texture]
+            self._width = self._texture.width*scale
+            self._height = self._texture.height*scale
+            self._texture.scale = scale
 
     def draw(self):
-        arcade.draw_rectangle_filled(
-            self.position[0], self.position[1], 100, 100, arcade.color.BLACK)
+        super().draw()
+    
+    def onHit(self):
+        pass
 
     def update(self, flags):
         deltaX = 0
@@ -23,6 +35,6 @@ class Player(arcade.Sprite):
             deltaY += -1
         deltaX *= self.speed
         deltaY *= self.speed
-        self.change_x=approach(self.change_x,deltaX,0.1)
-        self.change_y=approach(self.change_y,deltaY,0.1)
+        self.change_x = approach(self.change_x, deltaX, 0.1)
+        self.change_y = approach(self.change_y, deltaY, 0.1)
         super().update()

@@ -3,8 +3,9 @@ from views.game.player import Player
 from views.game.bullet import Bullet
 from views.game.enemy import Enemy
 import utils.globals
+from utils.utilFunctions import isOnScreen
 from utils.loader import assets
-from utils.globals import bullets, enemies
+from utils.globals import enemyBullets, playerBullets, enemies, player
 
 
 class randomView(arcade.View):
@@ -23,7 +24,6 @@ class randomView(arcade.View):
 class GameView(arcade.View):
     def __init__(self):
         super().__init__()
-        self.player = Player()
         self.flags = utils.globals.keyFlags()
         self.uptime = 0
 
@@ -39,32 +39,53 @@ class GameView(arcade.View):
 
     def on_draw(self):
         arcade.start_render()
-        self.player.draw()
-        [b.draw() for b in bullets]
+        player.draw()
+        [b.draw() for b in enemyBullets]
+        [b.draw() for b in playerBullets]
         [e.draw() for e in enemies]
 
     def on_update(self, deltaTime):
         self.uptime += deltaTime
 
-        self.player.update(self.flags)
-        [b.update() for b in bullets]
+        player.update(self.flags)
+        [b.update() for b in playerBullets]
+        [b.update() for b in enemyBullets]
         [e.update(self.uptime) for e in enemies]
 
-        # player shhoting
+        # player is shot
+        colided = arcade.check_for_collision_with_list(player, enemyBullets)
+        if len(colided) > 0:
+            for c in colided:
+                c.kill()
+                player.onHit()
+
+        # enemies are shot?
+        for e in enemies:
+            colided = arcade.check_for_collision_with_list(e, playerBullets)
+            if len(colided) > 0:
+                for c in colided:
+                    c.kill()
+
+        # player shoting
         if self.flags.space:
             if (self.lastShotTime+self.bulletDelay < self.uptime):
                 self.lastShotTime = self.uptime
-                bullets.append(Bullet(self.player.position, 0, 10))
+                playerBullets.append(Bullet(player.position, 0, 10, 90))
 
         # spawn enemies
         if self.lastEnemySpawnTime+self.enemySpawnDelay < self.uptime:
             enemies.append(Enemy())
             self.lastEnemySpawnTime = self.uptime
 
-        # remove old bullets
-        for b in bullets:
-            if b.position[0] > 700 or b.position[1] > 700:
-                bullets.remove(b)
+        # remove old enemy Bullets bullets
+        for b in enemyBullets:
+            if not isOnScreen(b.position):
+                enemyBullets.remove(b)
+                del b
+        # remove old player bullets
+        for b in playerBullets:
+            if not isOnScreen(b.position):
+                playerBullets.remove(b)
                 del b
 
     def on_mouse_press(self, _x, _y, _button, _modifiers):

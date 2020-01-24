@@ -1,6 +1,5 @@
 def approach(current, target, krok):
     delta = target-current
-
     return current+delta*krok
 
 
@@ -18,3 +17,14 @@ def clamp(val, maxv, minv=0):
         ret = maxv
 
     return ret
+
+
+def isOnScreen(pos):
+    from utils.globals import WIDTH, HEIGHT
+    x = False
+    y = False
+    if pos[0] > 0-100 and pos[0] < WIDTH+100:
+        x = True
+    if pos[1] > 0-100 and pos[1] < HEIGHT+100:
+        y = True
+    return x and y

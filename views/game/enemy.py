@@ -1,42 +1,74 @@
 import arcade
 from views.game.bullet import Bullet
-from utils.globals import bullets
+from utils.globals import enemyBullets, player
+from utils.loader import assets
 import random
 from utils.utilFunctions import getDist, approach, clamp
 import math
 
 
 class Enemy(arcade.Sprite):
-    """ ma lecieć do losowego koorda>=200, obracać się w strone gracza i szczelać. bullety tutaj"""
+    """ ma lecieć do losowego koorda>=200, obracać się w strone gracza i szczelać. bullety spawnowane tutaj"""
 
-    def __init__(self):
+    def __init__(self, scale=1):
         super().__init__(None)
-        # bullets.append(Bullet([200, 200], 0, 1, color=arcade.color.JAPANESE_INDIGO))
-        print("spawning enemy")
-        self.lastShotTime = -9999
+        self._texture = assets["enemy1"]
+        if self._texture:
+            self.textures = [self._texture]
+            self._width = self._texture.width*scale
+            self._height = self._texture.height*scale
+            self._texture.scale = scale
+        self.lastShotTime = 0
         self.shotCooldown = 2
+
         self.target = [random.randint(100, 500), random.randint(100, 500)]
+        self.position = [random.randint(0, 600), 500]
+        # self.target = [300,300]
+        # self.position = [300,300]
+
         self.lookDirection = 0
-        self.position = [100, 100]
         self.speed = 5
-        self.maxDist = getDist(self.position, self.target)
+        self.bulletSpeed = 5
+        self.maxDistX = math.sqrt(
+            math.pow(self.position[0]-self.target[0], 2))+1e-3
+        self.maxDistY = math.sqrt(
+            math.pow(self.position[1]-self.target[1], 2))+1e-3
 
     def update(self, uptime):
-        if getDist(self.position, self.target) < 100:
-            if uptime+self.shotCooldown < self.lastShotTime:
+        speedX = 0
+        speedY = 0
+        targetAngle = 180
+        if getDist(self.position, self.target) < 70:
+            # stój i strzelaj,obracając się w sron gracza
+
+            pX = (player.position[0]-self.position[0])
+            pY = (player.position[1]-self.position[1])
+            pAngle = math.atan2(pY, pX)
+            targetAngle = math.degrees(pAngle)-90
+            if self.lastShotTime+self.shotCooldown < uptime:
                 self.lastShotTime = uptime
-                print("SHOT!")
+                bX = math.cos(pAngle)
+                bY = math.sin(pAngle)
+
+                enemyBullets.append(
+                    Bullet(self.position, bX*self.speed, bY*self.speed, angle=math.degrees(pAngle)-90,color="r"))
         else:
             # leć do target
-            # approach(self.position[0], self.target[0], 0.1)
-            wX = math.sqrt(math.pow(self.position[0]-self.target[0], 2))
-            wY = math.sqrt(math.pow(self.position[1]-self.target[1], 2))
+            wX = self.target[0]-self.position[0]
+            wY = self.target[1]-self.position[1]
 
-            # self.change_x = deltaX
-            # self.change_y = deltaY
-            super().update()
-            pass
+            targetAngle = math.degrees(math.atan2(wY, wX))-90
+
+            speedX = (wX/self.maxDistX)*self.speed
+            speedY = (wY/self.maxDistY)*self.speed
+
+        self.change_x = approach(self.change_x, speedX, 0.1)
+        self.change_y = approach(self.change_y, speedY, 0.1)
+        self.angle = approach(self.angle, targetAngle, 0.1)
+        super().update()
+
+    def onHit(self):
+        pass
 
     def draw(self):
-        arcade.draw_rectangle_filled(
-            self.position[0], self.position[1], 50, 50, arcade.color.DARK_BLUE, self.position[1])
+        super().draw()
