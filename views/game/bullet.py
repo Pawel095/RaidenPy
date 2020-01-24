@@ -11,7 +11,7 @@ class Bullet(arcade.Sprite):
 
     def draw(self):
         arcade.draw_rectangle_filled(
-            self.position[0], self.position[1], 50, 50, self.color, self.position[0])
+            self.position[0], self.position[1], 50, 50, self.color, self.position[1])
 
     def update(self):
         super().update()

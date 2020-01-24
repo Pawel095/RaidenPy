@@ -2,9 +2,9 @@ import arcade
 from views.game.player import Player
 from views.game.bullet import Bullet
 from views.game.enemy import Enemy
-import utils.flags
+import utils.globals
 from utils.loader import assets
-from utils.flags import bullets
+from utils.globals import bullets, enemies
 
 
 class randomView(arcade.View):
@@ -24,14 +24,14 @@ class GameView(arcade.View):
     def __init__(self):
         super().__init__()
         self.player = Player()
-        self.flags = utils.flags.keyFlags()
+        self.flags = utils.globals.keyFlags()
         self.uptime = 0
 
         self.lastShotTime = -9999
         self.bulletDelay = 0.2
 
-        self.lastEnemySpawnTime=-9999
-        self.enemySpawnDelay=4
+        self.lastEnemySpawnTime = -9999
+        self.enemySpawnDelay = 4
 
     def on_show(self):
         arcade.set_background_color(arcade.color.WHITE)
@@ -41,17 +41,25 @@ class GameView(arcade.View):
         arcade.start_render()
         self.player.draw()
         [b.draw() for b in bullets]
+        [e.draw() for e in enemies]
 
     def on_update(self, deltaTime):
         self.uptime += deltaTime
 
         self.player.update(self.flags)
         [b.update() for b in bullets]
+        [e.update(self.uptime) for e in enemies]
 
+        # player shhoting
         if self.flags.space:
             if (self.lastShotTime+self.bulletDelay < self.uptime):
                 self.lastShotTime = self.uptime
                 bullets.append(Bullet(self.player.position, 0, 10))
+
+        # spawn enemies
+        if self.lastEnemySpawnTime+self.enemySpawnDelay < self.uptime:
+            enemies.append(Enemy())
+            self.lastEnemySpawnTime = self.uptime
 
         # remove old bullets
         for b in bullets:

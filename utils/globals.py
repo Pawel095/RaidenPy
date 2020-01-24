@@ -4,6 +4,8 @@ class keyFlags():
         self.right = False
         self.up = False
         self.down = False
-        self.space=False
+        self.space = False
 
-bullets=[]
+
+bullets = []
+enemies = []
