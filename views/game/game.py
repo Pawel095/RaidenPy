@@ -2,10 +2,13 @@ import arcade
 from views.game.player import Player
 from views.game.bullet import Bullet
 from views.game.enemy import Enemy
+from views.game.explosion import Explosion
+from views.game.background import Background
 import utils.globals
-from utils.utilFunctions import isOnScreen
+from utils.utilFunctions import isRemoveable
 from utils.loader import assets
-from utils.globals import enemyBullets, playerBullets, enemies, player
+from utils.globals import enemyBullets, playerBullets, enemies, explosions
+import time
 
 
 class randomView(arcade.View):
@@ -26,38 +29,59 @@ class GameView(arcade.View):
         super().__init__()
         self.flags = utils.globals.keyFlags()
         self.uptime = 0
+        self.player = Player()
+        self.background = Background()
 
         self.lastShotTime = -9999
         self.bulletDelay = 0.2
 
         self.lastEnemySpawnTime = -9999
-        self.enemySpawnDelay = 4
+        self.enemySpawnDelay = 2
+
+        self.musicDuration = 1*60 + 10
+        self.musicTimer=0
 
     def on_show(self):
-        arcade.set_background_color(arcade.color.WHITE)
+        arcade.set_background_color(arcade.color.BLACK)
         arcade.play_sound(assets["defcon0"])
 
     def on_draw(self):
         arcade.start_render()
-        player.draw()
+        self.background.draw()
+        self.player.draw()
         [b.draw() for b in enemyBullets]
         [b.draw() for b in playerBullets]
         [e.draw() for e in enemies]
+        explosions.draw()
 
     def on_update(self, deltaTime):
         self.uptime += deltaTime
+        # play music if ended
+        if self.musicDuration+self.musicTimer<self.uptime:
+            arcade.play_sound(assets["defcon0"])
 
-        player.update(self.flags)
-        [b.update() for b in playerBullets]
-        [b.update() for b in enemyBullets]
+        self.background.update(deltaTime)
+
+        self.player.update(self.flags)
+        # [b.update() for b in playerBullets]
+        playerBullets.update()
+        # [b.update() for b in enemyBullets]
+        enemyBullets.update()
         [e.update(self.uptime) for e in enemies]
+        [e.update(deltaTime) for e in explosions]
 
-        # player is shot
-        colided = arcade.check_for_collision_with_list(player, enemyBullets)
+        # player is shot?
+        colided = arcade.check_for_collision_with_list(
+            self.player, enemyBullets)
         if len(colided) > 0:
             for c in colided:
                 c.kill()
-                player.onHit()
+                self.player.onHit()
+                if not self.player.alive:
+                    self.enemySpawnDelay = 99999
+                    for e in enemies:
+                        e.goAway(self.uptime)
+                    # TODO: show game over text
 
         # enemies are shot?
         for e in enemies:
@@ -65,33 +89,31 @@ class GameView(arcade.View):
             if len(colided) > 0:
                 for c in colided:
                     c.kill()
+                    e.onHit(self.uptime)
 
         # player shoting
         if self.flags.space:
             if (self.lastShotTime+self.bulletDelay < self.uptime):
                 self.lastShotTime = self.uptime
-                playerBullets.append(Bullet(player.position, 0, 10, 90))
+                playerBullets.append(Bullet(self.player.position, 0, 10, 90))
 
         # spawn enemies
         if self.lastEnemySpawnTime+self.enemySpawnDelay < self.uptime:
-            enemies.append(Enemy())
+            enemies.append(Enemy(self.player))
             self.lastEnemySpawnTime = self.uptime
 
         # remove old enemy Bullets bullets
         for b in enemyBullets:
-            if not isOnScreen(b.position):
+            if not isRemoveable(b.position):
                 enemyBullets.remove(b)
                 del b
         # remove old player bullets
         for b in playerBullets:
-            if not isOnScreen(b.position):
+            if not isRemoveable(b.position):
                 playerBullets.remove(b)
                 del b
 
     def on_mouse_press(self, _x, _y, _button, _modifiers):
-        # arcade.close_window()
-        # rv = randomView()
-        # self.window.show_view(rv)
         pass
 
     def on_key_press(self, key, modifiers):
