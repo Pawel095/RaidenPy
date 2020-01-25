@@ -11,6 +11,7 @@ from utils.globals import enemyBullets, playerBullets, enemies, explosions
 import time
 
 
+
 class GameView(arcade.View):
     def __init__(self):
         super().__init__()
@@ -117,7 +118,7 @@ class GameView(arcade.View):
     def on_key_press(self, key, modifiers):
         """ Called whenever the user presses a key. """
         if self.gameOver:
-            self.window.show_view(self.mainMenu)
+            self.window.show_view(main_menu)
 
         if key == arcade.key.LEFT:
             self.flags.left = True
@@ -131,8 +132,8 @@ class GameView(arcade.View):
         if key == arcade.key.SPACE:
             self.flags.space = True
 
-        if key == arcade.key.ESCAPE:
-            arcade.close_window()
+        # if key == arcade.key.ESCAPE:
+        #     arcade.close_window()
 
     def on_key_release(self, key, modifiers):
         """ Called whenever a user releases a key. """
@@ -147,3 +148,5 @@ class GameView(arcade.View):
 
         if key == arcade.key.SPACE:
             self.flags.space = False
+
+from utils.views import main_menu

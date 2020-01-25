@@ -17,6 +17,8 @@ WINDOW = None
 
 WIDTH = 600
 HEIGHT = 600
+SCREEN_WIDTH = WIDTH
+SCREEN_HEIGHT = HEIGHT
 bullets = []
 enemies = []
 l = Loader()
