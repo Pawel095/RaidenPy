@@ -11,8 +11,14 @@ class keyFlags():
         self.space = False
 
 
+TITLE = "Raiden Py"
+WINDOW = None
+
+
 WIDTH = 600
 HEIGHT = 600
+bullets = []
+enemies = []
 l = Loader()
 print("load Start")
 l.load()
@@ -21,5 +27,3 @@ enemyBullets = arcade.SpriteList()
 playerBullets = arcade.SpriteList()
 enemies = arcade.SpriteList()
 explosions = arcade.SpriteList()
-
-
