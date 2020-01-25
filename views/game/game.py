@@ -3,10 +3,11 @@ from views.game.player import Player
 from views.game.bullet import Bullet
 from views.game.enemy import Enemy
 from views.game.explosion import Explosion
+from views.game.background import Background
 import utils.globals
 from utils.utilFunctions import isRemoveable
 from utils.loader import assets
-from utils.globals import enemyBullets, playerBullets, enemies,explosions
+from utils.globals import enemyBullets, playerBullets, enemies, explosions
 import time
 
 
@@ -28,7 +29,8 @@ class GameView(arcade.View):
         super().__init__()
         self.flags = utils.globals.keyFlags()
         self.uptime = 0
-        self.player=Player()
+        self.player = Player()
+        self.background = Background()
 
         self.lastShotTime = -9999
         self.bulletDelay = 0.2
@@ -36,12 +38,16 @@ class GameView(arcade.View):
         self.lastEnemySpawnTime = -9999
         self.enemySpawnDelay = 2
 
+        self.musicDuration = 1*60 + 10
+        self.musicTimer=0
+
     def on_show(self):
-        arcade.set_background_color(arcade.color.WHITE)
+        arcade.set_background_color(arcade.color.BLACK)
         arcade.play_sound(assets["defcon0"])
 
     def on_draw(self):
         arcade.start_render()
+        self.background.draw()
         self.player.draw()
         [b.draw() for b in enemyBullets]
         [b.draw() for b in playerBullets]
@@ -50,6 +56,11 @@ class GameView(arcade.View):
 
     def on_update(self, deltaTime):
         self.uptime += deltaTime
+        # play music if ended
+        if self.musicDuration+self.musicTimer<self.uptime:
+            arcade.play_sound(assets["defcon0"])
+
+        self.background.update(deltaTime)
 
         self.player.update(self.flags)
         # [b.update() for b in playerBullets]
@@ -60,17 +71,17 @@ class GameView(arcade.View):
         [e.update(deltaTime) for e in explosions]
 
         # player is shot?
-        colided = arcade.check_for_collision_with_list(self.player, enemyBullets)
+        colided = arcade.check_for_collision_with_list(
+            self.player, enemyBullets)
         if len(colided) > 0:
             for c in colided:
                 c.kill()
                 self.player.onHit()
                 if not self.player.alive:
-                    self.enemySpawnDelay=99999
+                    self.enemySpawnDelay = 99999
                     for e in enemies:
                         e.goAway(self.uptime)
                     # TODO: show game over text
-
 
         # enemies are shot?
         for e in enemies:
