@@ -7,6 +7,7 @@ import utils.globals
 from utils.utilFunctions import isRemoveable
 from utils.loader import assets
 from utils.globals import enemyBullets, playerBullets, enemies,explosions
+import time
 
 
 class randomView(arcade.View):
@@ -64,6 +65,12 @@ class GameView(arcade.View):
             for c in colided:
                 c.kill()
                 self.player.onHit()
+                if not self.player.alive:
+                    self.enemySpawnDelay=99999
+                    for e in enemies:
+                        e.goAway(self.uptime)
+                    # TODO: show game over text
+
 
         # enemies are shot?
         for e in enemies:
@@ -96,7 +103,6 @@ class GameView(arcade.View):
                 del b
 
     def on_mouse_press(self, _x, _y, _button, _modifiers):
-        explosions.append(Explosion())
         pass
 
     def on_key_press(self, key, modifiers):
