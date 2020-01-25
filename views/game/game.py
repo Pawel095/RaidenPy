@@ -11,19 +11,6 @@ from utils.globals import enemyBullets, playerBullets, enemies, explosions
 import time
 
 
-class randomView(arcade.View):
-    def on_show(self):
-        arcade.set_background_color(arcade.color.BLACK)
-
-    def on_draw(self):
-        arcade.start_render()
-        arcade.draw_text("Game Over - press ESCAPE to advance",
-                         300, 300, arcade.color.WHITE, 20, anchor_x="center")
-
-    def on_mouse_press(self, _x, _y, _button, _modifiers):
-        arcade.close_window()
-
-
 class GameView(arcade.View):
     def __init__(self):
         super().__init__()
@@ -32,14 +19,18 @@ class GameView(arcade.View):
         self.player = Player()
         self.background = Background()
 
-        self.lastShotTime = -9999
+        self.lastShotTime = 0
         self.bulletDelay = 0.2
 
-        self.lastEnemySpawnTime = -9999
+        self.lastEnemySpawnTime = 0
         self.enemySpawnDelay = 2
 
         self.musicDuration = 1*60 + 10
-        self.musicTimer=0
+        self.musicTimer = 0
+
+        self.gameOverTimer = 0
+        self.gameOverTextTime = 1
+        self.gameOver = False
 
     def on_show(self):
         arcade.set_background_color(arcade.color.BLACK)
@@ -54,10 +45,16 @@ class GameView(arcade.View):
         [e.draw() for e in enemies]
         explosions.draw()
 
+        if self.gameOver and self.gameOverTimer+self.gameOverTextTime < self.uptime:
+            arcade.draw_text("GAME OVER", 300, 420, arcade.color.WHITE_SMOKE, font_size=40,
+                             align="center", anchor_x="center", anchor_y="center")
+            arcade.draw_text("press any key to return to main menu", 300, 250, arcade.color.WHITE_SMOKE,
+                             font_size=20, align="center", anchor_x="center", anchor_y="center")
+
     def on_update(self, deltaTime):
         self.uptime += deltaTime
         # play music if ended
-        if self.musicDuration+self.musicTimer<self.uptime:
+        if self.musicDuration+self.musicTimer < self.uptime:
             arcade.play_sound(assets["defcon0"])
 
         self.background.update(deltaTime)
@@ -81,7 +78,8 @@ class GameView(arcade.View):
                     self.enemySpawnDelay = 99999
                     for e in enemies:
                         e.goAway(self.uptime)
-                    # TODO: show game over text
+                    self.gameOver = True
+                    self.gameOverTimer = self.uptime
 
         # enemies are shot?
         for e in enemies:
@@ -118,6 +116,9 @@ class GameView(arcade.View):
 
     def on_key_press(self, key, modifiers):
         """ Called whenever the user presses a key. """
+        if self.gameOver:
+            self.window.show_view(self.mainMenu)
+
         if key == arcade.key.LEFT:
             self.flags.left = True
         if key == arcade.key.RIGHT:

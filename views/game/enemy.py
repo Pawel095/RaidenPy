@@ -27,8 +27,8 @@ class Enemy(arcade.Sprite):
         self._blinker = 0
 
         self.goAwayTimer = 0
-        self.goAwayWaitSeconds = 2
-        self.turnSeconds = 1.5
+        self.goAwayWaitSeconds = 3
+        self.turnSeconds = 2
         self.goingAway = False
 
         self.target = [random.randint(100, 500), random.randint(100, 500)]

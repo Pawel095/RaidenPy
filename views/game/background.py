@@ -1,23 +1,26 @@
 import arcade
 import random
 from utils.globals import WIDTH, HEIGHT
+from utils.utilFunctions import isRemoveable
 
 
 class Particle():
     """mały obracający się biały kwadrat"""
 
-    def __init__(self, position=[random.randint(0, WIDTH), HEIGHT+100]):
+    def __init__(self, position=[random.randint(0, WIDTH), HEIGHT+10]):
         self.change_x = random.randrange(-2,2)
         self.change_y = random.randrange(-400,-10)
         self.angle_change = random.randrange(-20, 20)
         self.position = position
         self.angle = random.randint(0, 360)
-        self.size = random.randint(1, 7)
+        self.size = random.randint(4, 7)
 
     def update(self, deltaT):
         self.position[0] += self.change_x*deltaT
         self.position[1] += self.change_y*deltaT
         self.angle += self.angle_change*deltaT
+        if not isRemoveable(self.position):
+            self.position = [random.randint(0, WIDTH), HEIGHT+10]
 
     def draw(self):
         arcade.draw_rectangle_filled(self.position[0],
@@ -31,7 +34,8 @@ class Particle():
 class Background():
     def __init__(self):
         self.particles = []
-        for _ in range(10):
+
+        for _ in range(30):
             self.particles.append(
                 Particle([random.randint(0, WIDTH), random.randrange(0, HEIGHT)]))
 
