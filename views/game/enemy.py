@@ -5,15 +5,16 @@ from utils.globals import enemyBullets, explosions
 from utils.loader import assets
 import random
 from utils.utilFunctions import getDist, approach, clamp
+from utils.menusFunctions import getCurrDiff
 import math
 
 
 class Enemy(arcade.Sprite):
-    """ ma lecieć do losowego koorda>=200, obracać się w strone gracza i szczelać. bullety spawnowane tutaj"""
+    """ ma lecieć do losowego koorda>=100, obracać się w strone gracza i szczelać. bullety spawnowane tutaj"""
 
     def __init__(self, player, scale=1):
         super().__init__(None)
-        self.texture = assets["enemy1"]
+        self.texture = assets["enemy"+str(random.randint(1,3))]
         self.player = player
 
         self.hp = 2
@@ -23,7 +24,7 @@ class Enemy(arcade.Sprite):
         self.shotCooldown = 2
 
         self.lastBlinkTriggerTime = 0
-        self.blinkTime = 0.5
+        self.blinkTime = 0.5+(0.1*getCurrDiff())
         self.blinkStatus = False
         self._blinker = 0
 
@@ -38,8 +39,8 @@ class Enemy(arcade.Sprite):
         # self.position = [300,300]
 
         self.lookDirection = 0
-        self.speed = 20
-        self.bulletSpeed = 5
+        self.speed = 10+(4*getCurrDiff())
+        self.bulletSpeed = 5 + (2*getCurrDiff())
 
         self.maxDistX = math.sqrt(
             math.pow(self.position[0]-self.target[0], 2))+1e-3

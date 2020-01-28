@@ -19,7 +19,7 @@ def getSoundState():
     return soundState
 
 def getCurrDiff():
-    return currentDifficulty
+    return difficultyList[currentDifficulty]
 
 def getCurrLang():
     return currentLanguage

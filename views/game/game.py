@@ -37,7 +37,7 @@ class GameView(arcade.View):
     def on_show(self):
         arcade.set_background_color(arcade.color.BLACK)
         # arcade.play_sound(assets["defcon0"])
-        self.enemySpawnDelay = 2-(0.5*getCurrDiff())
+        self.enemySpawnDelay = 2.5-(0.5*getCurrDiff())
 
     def on_draw(self):
         arcade.start_render()
