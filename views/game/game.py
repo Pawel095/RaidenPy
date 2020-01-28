@@ -8,8 +8,9 @@ import utils.globals
 from utils.utilFunctions import isRemoveable
 from utils.loader import assets
 from utils.globals import enemyBullets, playerBullets, enemies, explosions
+from utils.menusFunctions import soundState, languageList, currentLanguage
+from utils.languagePack import gameOverText, gameOverInfoText
 import time
-
 
 
 class GameView(arcade.View):
@@ -27,7 +28,7 @@ class GameView(arcade.View):
         self.enemySpawnDelay = 2
 
         self.musicDuration = 1*60 + 10
-        self.musicTimer = 0
+        self.musicTimer = -7777
 
         self.gameOverTimer = 0
         self.gameOverTextTime = 1
@@ -35,7 +36,7 @@ class GameView(arcade.View):
 
     def on_show(self):
         arcade.set_background_color(arcade.color.BLACK)
-        arcade.play_sound(assets["defcon0"])
+        # arcade.play_sound(assets["defcon0"])
 
     def on_draw(self):
         arcade.start_render()
@@ -47,16 +48,19 @@ class GameView(arcade.View):
         explosions.draw()
 
         if self.gameOver and self.gameOverTimer+self.gameOverTextTime < self.uptime:
-            arcade.draw_text("GAME OVER", 300, 420, arcade.color.WHITE_SMOKE, font_size=40,
+            arcade.draw_text(gameOverText[currentLanguage], 300, 420, arcade.color.WHITE_SMOKE, font_size=40,
                              align="center", anchor_x="center", anchor_y="center")
-            arcade.draw_text("press any key to return to main menu", 300, 250, arcade.color.WHITE_SMOKE,
+            arcade.draw_text(gameOverInfoText[currentLanguage], 300, 250, arcade.color.WHITE_SMOKE,
                              font_size=20, align="center", anchor_x="center", anchor_y="center")
 
     def on_update(self, deltaTime):
         self.uptime += deltaTime
-        # play music if ended
-        if self.musicDuration+self.musicTimer < self.uptime:
-            arcade.play_sound(assets["defcon0"])
+
+        # play music if enabled
+        if soundState:
+            if self.musicDuration+self.musicTimer < self.uptime:
+                self.musicTimer = self.uptime
+                arcade.play_sound(assets["defcon0"])
 
         self.background.update(deltaTime)
 
@@ -118,7 +122,7 @@ class GameView(arcade.View):
     def on_key_press(self, key, modifiers):
         """ Called whenever the user presses a key. """
         if self.gameOver:
-            self.window.show_view(main_menu)
+            arcade.close_window()
 
         if key == arcade.key.LEFT:
             self.flags.left = True
@@ -148,5 +152,3 @@ class GameView(arcade.View):
 
         if key == arcade.key.SPACE:
             self.flags.space = False
-
-from utils.views import main_menu

@@ -16,3 +16,6 @@ playText = ["Play","Graj"]
 optionsText = ["Options","Opcje"]
 leaderboardText = ["Leaderboard","Tabela Wyników"]
 exitText = ["Exit","Wyjdź"]
+
+gameOverText = ["Game Over","Koniec Gry"]
+gameOverInfoText = ["press any key to exit the game","Dowolni klawisz wyjdze z gry"]
