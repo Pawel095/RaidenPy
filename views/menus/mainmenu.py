@@ -3,7 +3,7 @@ from arcade.gui import Theme
 import arcade
 import utils.globals
 import utils.views
-
+import utils.menusFunctions
 
 
 
@@ -36,9 +36,20 @@ class MainMenu(arcade.View):
         self.set_button_textures()
 
     def set_buttons(self):
-        self.button_list.append(PlayButton(self, 300, 380, 190, 50, theme=self.theme))
-        self.button_list.append(OptionsButton(self, 300, 310, 190, 50, theme=self.theme))
-        self.button_list.append(ExitButton(self, 300, 240, 190, 50, theme=self.theme))
+        playButton = PlayButton(self, 300, 380, 190, 50, theme=self.theme)
+        optionsButton = OptionsButton(self, 300, 310, 190, 50, theme=self.theme)
+        leaderboardButton = LeaderboardButton(self, 300, 240, 190, 50, theme=self.theme)
+        exitButton = ExitButton(self, 300, 170, 190, 50, theme=self.theme)
+
+        self.button_list.append(playButton)
+        self.button_list.append(optionsButton)
+        self.button_list.append(leaderboardButton)
+        self.button_list.append(exitButton)
+
+        utils.menusFunctions.app_buttons.append(playButton)
+        utils.menusFunctions.app_buttons.append(optionsButton)
+        utils.menusFunctions.app_buttons.append(leaderboardButton)
+        utils.menusFunctions.app_buttons.append(exitButton)
 
     def setup(self):
         self.setup_theme()
@@ -57,7 +68,7 @@ class MainMenu(arcade.View):
 
 
 class PlayButton(TextButton):
-    def __init__(self, game, x=0, y=0, width=100, height=40, text="Play", font_size=18, theme=None):
+    def __init__(self, game, x=0, y=0, width=100, height=40, text=utils.languagePack.playText[utils.menusFunctions.currentLanguage], font_size=18, theme=None):
         super().__init__(x, y, width, height, text, font_size, theme=theme)
         self.game = game
        
@@ -71,9 +82,12 @@ class PlayButton(TextButton):
             utils.globals.WINDOW.show_view(utils.views.game_view)
             # self.game.pause = False
 
+    def update(self):
+        super().__init__(self.center_x, self.center_y, self.width, self.height, text=utils.languagePack.playText[utils.menusFunctions.currentLanguage], theme=self.theme)
+
 
 class OptionsButton(TextButton):
-    def __init__(self, game, x=0, y=0, width=100, height=40, text="Options", font_size=18, theme=None):
+    def __init__(self, game, x=0, y=0, width=100, height=40, text=utils.languagePack.optionsText[utils.menusFunctions.currentLanguage], font_size=18, theme=None):
         super().__init__(x, y, width, height, text, font_size, theme=theme)
         self.game = game
 
@@ -85,10 +99,28 @@ class OptionsButton(TextButton):
         if self.pressed:
             self.pressed = False 
             utils.globals.WINDOW.show_view(utils.views.options_view)
+    
+    def update(self):
+        super().__init__(self.center_x, self.center_y, self.width, self.height, text=utils.languagePack.optionsText[utils.menusFunctions.currentLanguage], theme=self.theme)
 
+
+class LeaderboardButton(TextButton):
+    def __init__(self, game, x=0, y=0, width=100, height=40, text=utils.languagePack.leaderboardText[utils.menusFunctions.currentLanguage], font_size=18, theme=None):
+        super().__init__(x, y, width, height, text, font_size, theme=theme)
+        self.game = game
+
+    def on_press(self):
+        self.pressed = True
+
+    def on_release(self):
+        if self.pressed:
+            self.pressed = False
+    
+    def update(self):
+        super().__init__(self.center_x, self.center_y, self.width, self.height, text=utils.languagePack.leaderboardText[utils.menusFunctions.currentLanguage], theme=self.theme)
 
 class ExitButton(TextButton):
-    def __init__(self, game, x=0, y=0, width=100, height=40, text="Exit", font_size=18, theme=None):
+    def __init__(self, game, x=0, y=0, width=100, height=40, text=utils.languagePack.exitText[utils.menusFunctions.currentLanguage], font_size=18, theme=None):
         super().__init__(x, y, width, height, text, font_size, theme=theme)
         self.game = game
 
@@ -99,3 +131,6 @@ class ExitButton(TextButton):
         if self.pressed:
             self.pressed = False
             arcade.close_window()
+    
+    def update(self):
+        super().__init__(self.center_x, self.center_y, self.width, self.height, text=utils.languagePack.exitText[utils.menusFunctions.currentLanguage], theme=self.theme)

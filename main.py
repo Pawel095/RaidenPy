@@ -3,7 +3,7 @@ from views.game.game import GameView
 from utils.globals import WIDTH, HEIGHT
 import utils.globals
 from utils.loader import Loader
-import utils.views
+from utils.views import main_menu
 
 
 def main():

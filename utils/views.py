@@ -1,10 +1,18 @@
+from views.game.game import GameView
 from views.menus.mainmenu import MainMenu
 from views.menus.options import Options
-from views.game.game import GameView
+from views.menus.sound import SoundOptionsView
+from views.menus.language import LanguageOptionsView
+from views.menus.keybinds import KeybindsOptionsView
+from views.menus.difficulty import DifficultyOptionsView
 
 
 
-
+game_view = GameView()
 main_menu = MainMenu()
 options_view = Options()
-game_view = GameView()
+sound_view = SoundOptionsView()
+language_view = LanguageOptionsView()
+keybinds_view = KeybindsOptionsView()
+difficulty_view = DifficultyOptionsView()
+
