@@ -1,6 +1,6 @@
 import arcade
 from utils.loader import assets
-from utils.menusFunctions import getSoundState()
+from utils.menusFunctions import getSoundState
 import random
 
 class Bullet(arcade.Sprite):

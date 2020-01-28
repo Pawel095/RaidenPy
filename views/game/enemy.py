@@ -116,8 +116,6 @@ class Enemy(arcade.Sprite):
     def goAway(self, uptime):
         self.speed = 1
         self.goAwayTimer = uptime
-        self.change_x=0
-        self.change_y=0
         self.goingAway = True
         self.target=[random.randint(-100,700),900]
 
