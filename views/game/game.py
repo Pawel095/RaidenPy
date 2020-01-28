@@ -8,7 +8,7 @@ import utils.globals
 from utils.utilFunctions import isRemoveable
 from utils.loader import assets
 from utils.globals import enemyBullets, playerBullets, enemies, explosions
-from utils.menusFunctions import soundState, languageList, currentLanguage
+from utils.menusFunctions import getSoundState, languageList, getCurrLang, getCurrDiff, difficultyList
 from utils.languagePack import gameOverText, gameOverInfoText
 import time
 
@@ -37,6 +37,7 @@ class GameView(arcade.View):
     def on_show(self):
         arcade.set_background_color(arcade.color.BLACK)
         # arcade.play_sound(assets["defcon0"])
+        self.enemySpawnDelay = 2-(0.5*getCurrDiff())
 
     def on_draw(self):
         arcade.start_render()
@@ -48,16 +49,16 @@ class GameView(arcade.View):
         explosions.draw()
 
         if self.gameOver and self.gameOverTimer+self.gameOverTextTime < self.uptime:
-            arcade.draw_text(gameOverText[currentLanguage], 300, 420, arcade.color.WHITE_SMOKE, font_size=40,
+            arcade.draw_text(gameOverText[getCurrLang()], 300, 420, arcade.color.WHITE_SMOKE, font_size=40,
                              align="center", anchor_x="center", anchor_y="center")
-            arcade.draw_text(gameOverInfoText[currentLanguage], 300, 250, arcade.color.WHITE_SMOKE,
+            arcade.draw_text(gameOverInfoText[getCurrLang()], 300, 250, arcade.color.WHITE_SMOKE,
                              font_size=20, align="center", anchor_x="center", anchor_y="center")
 
     def on_update(self, deltaTime):
         self.uptime += deltaTime
 
         # play music if enabled
-        if soundState:
+        if getSoundState():
             if self.musicDuration+self.musicTimer < self.uptime:
                 self.musicTimer = self.uptime
                 arcade.play_sound(assets["defcon0"])
@@ -95,7 +96,7 @@ class GameView(arcade.View):
                     e.onHit(self.uptime)
 
         # player shoting
-        if self.flags.space:
+        if self.flags.space and not self.gameOver:
             if (self.lastShotTime+self.bulletDelay < self.uptime):
                 self.lastShotTime = self.uptime
                 playerBullets.append(Bullet(self.player.position, 0, 10, 90))
@@ -121,7 +122,7 @@ class GameView(arcade.View):
 
     def on_key_press(self, key, modifiers):
         """ Called whenever the user presses a key. """
-        if self.gameOver:
+        if self.gameOver and self.gameOverTimer+self.gameOverTextTime<self.uptime:
             arcade.close_window()
 
         if key == arcade.key.LEFT:

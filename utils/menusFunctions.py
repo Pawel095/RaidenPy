@@ -15,6 +15,14 @@ currentDifficulty = 0
 difficultyText = utils.languagePack.difficultyEasy[currentLanguage]
 # turn sound on/off + change text
 
+def getSoundState():
+    return soundState
+
+def getCurrDiff():
+    return currentDifficulty
+
+def getCurrLang():
+    return currentLanguage
 
 def toggleSound():
     global soundState
