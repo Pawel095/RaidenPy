@@ -21,10 +21,12 @@ SCREEN_WIDTH = WIDTH
 SCREEN_HEIGHT = HEIGHT
 bullets = []
 enemies = []
+
 l = Loader()
 print("load Start")
 l.load()
 print("load End")
+
 enemyBullets = arcade.SpriteList()
 playerBullets = arcade.SpriteList()
 enemies = arcade.SpriteList()
