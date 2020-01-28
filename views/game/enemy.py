@@ -7,6 +7,7 @@ import random
 from utils.utilFunctions import getDist, approach, clamp
 from utils.menusFunctions import getCurrDiff
 import math
+from utils.menusFunctions import getSoundState
 
 
 class Enemy(arcade.Sprite):
@@ -111,6 +112,8 @@ class Enemy(arcade.Sprite):
 
     def kill(self):
         explosions.append(Explosion(self.position, scale=3))
+        if getSoundState():
+            arcade.play_sound(assets["death"+str(random.randint(1,3))])
         super().kill()
 
     def goAway(self, uptime):

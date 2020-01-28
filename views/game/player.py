@@ -3,7 +3,7 @@ from utils.utilFunctions import approach,clampToScreen
 from utils.loader import assets
 from utils.globals import explosions,enemies
 from views.game.explosion import Explosion
-
+from utils.menusFunctions import getSoundState
 
 class Player(arcade.Sprite):
     def __init__(self, speed=10, slowModifier=0.1,  scale=0.5):
@@ -21,6 +21,8 @@ class Player(arcade.Sprite):
     
     def onHit(self):
         self.alive=False
+        if getSoundState():
+            arcade.play_sound(assets["playerDeath"])
         explosions.append(Explosion(self.position,2))
 
     def update(self, flags):

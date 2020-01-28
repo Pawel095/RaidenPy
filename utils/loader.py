@@ -37,7 +37,12 @@ class Loader():
              worker(arcade.load_sound,"assets/laserShot4.wav","shot4"),
              worker(arcade.load_sound,"assets/laserShot5.wav","shot5"),
              worker(arcade.load_sound,"assets/laserShot6.wav","shot6"),
-             worker(arcade.load_spritesheet,"assets/explosion.png","explosion",[64,64,4,16])
+             worker(arcade.load_spritesheet,"assets/explosion.png","explosion",[64,64,4,16]),
+             worker(arcade.load_sound,"assets/enemy_death1.wav","death1"),
+             worker(arcade.load_sound,"assets/enemy_death2.wav","death2"),
+             worker(arcade.load_sound,"assets/enemy_death3.wav","death3"),
+             worker(arcade.load_sound,"assets/enemy_death3.wav","death3"),
+             worker(arcade.load_sound,"assets/player_death.wav","playerDeath")
              ])
         [t.start() for t in threads]
         [t.join() for t in threads]
