@@ -18,6 +18,7 @@ class Enemy(arcade.Sprite):
 
         self.hp = 2
 
+        self.firstShootingSwitch=True
         self.lastShotTime = 0
         self.shotCooldown = 2
 
@@ -51,12 +52,16 @@ class Enemy(arcade.Sprite):
         targetAngle = 180
         if not self.goingAway:
             if getDist(self.position, self.target) < 70:
-                # stój i strzelaj,obracając się w sron gracza
+                if self.firstShootingSwitch:
+                    self.firstShootingSwitch=False
+                    self.lastShotTime=uptime
+                # stój i strzelaj,obracając się w strone gracza
 
                 pX = (self.player.position[0]-self.position[0])
                 pY = (self.player.position[1]-self.position[1])
                 pAngle = math.atan2(pY, pX)
                 targetAngle = math.degrees(pAngle)-90
+                
                 if self.lastShotTime+self.shotCooldown < uptime:
                     self.lastShotTime = uptime
                     bX = math.cos(pAngle)
