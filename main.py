@@ -1,7 +1,7 @@
 import arcade
 import utils.globals
 from utils.loader import Loader
-import utils.views
+from utils.views import main_menu
 
 
 
