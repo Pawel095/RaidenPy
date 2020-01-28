@@ -3,6 +3,7 @@ from arcade.gui import Theme
 import arcade
 import utils.globals
 import utils.views
+import utils.languagePack
 from utils.menusFunctions import language, changeLanguage
 
 
@@ -55,6 +56,12 @@ class LanguageOptionsView(arcade.View):
                                       utils.globals.SCREEN_WIDTH, utils.globals.SCREEN_HEIGHT, self.background)
         arcade.draw_text(self.screen_header, self.screen_header_x, self.screen_header_y, arcade.color.ALICE_BLUE, self.screen_header_font_size, align="center", anchor_x="center", anchor_y="center")
         [button.draw() for button in self.button_list]
+
+    def on_update(self, delta_time):
+        self.updateText()
+
+    def updateText(self):
+        self.screen_header = utils.languagePack.languageText[utils.menusFunctions.currentLanguage]
 
 
 

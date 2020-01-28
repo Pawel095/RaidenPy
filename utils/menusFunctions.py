@@ -13,6 +13,17 @@ soundText = utils.languagePack.soundOnText[currentLanguage]
 difficultyList = [0, 1, 2, 3]
 currentDifficulty = 0
 difficultyText = utils.languagePack.difficultyEasy[currentLanguage]
+##movement
+keybindsPresets = [0, 1]
+currentBinds = 0
+bindsText = utils.languagePack.keybindsArrows[currentLanguage]
+
+moveLeft = 65361
+moveRight = 65363
+moveUp = 65362
+moveDown = 65364
+shoot = 32
+
 ##turn sound on/off + change text
 def toggleSound():
     global soundState
@@ -82,6 +93,38 @@ def difficultyLang():
         difficultyText = utils.languagePack.difficultyHard[currentLanguage]
     elif(currentDifficulty == 3):
         difficultyText = utils.languagePack.difficultyHell[currentLanguage]
+
+def changeKeybinds():
+    global bindsText
+    global currentBinds
+    global keybindsPresets
+    global moveLeft, moveRight, moveUp, moveDown
+
+    currentBinds += 1
+
+    if(currentBinds == len(keybindsPresets)):
+        currentBinds = 0
+
+    if(currentBinds == 0):
+        bindsText = utils.languagePack.keybindsArrows[currentLanguage]
+        moveLeft = 65361
+        moveRight = 65363
+        moveUp = 65362
+        moveDown = 65364
+    elif(currentBinds == 1):
+        bindsText = utils.languagePack.keybindsWASD[currentLanguage]
+        moveLeft = 97
+        moveRight = 100
+        moveUp = 119
+        moveDown = 115
+
+def keybindsLang():
+    global bindsText
+
+    if(currentBinds == 0):
+        bindsText = utils.languagePack.keybindsArrows[currentLanguage]
+    elif(currentBinds == 1):
+        bindsText = utils.languagePack.keybindsWASD[currentLanguage]
 
 
 
