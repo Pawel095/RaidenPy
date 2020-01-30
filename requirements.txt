@@ -2,3 +2,4 @@ arcade==2.2.7
 pyglet_ffmpeg2==0.1.16
 setuptools==44.0.0
 pyinstaller
+pysqlite3
