@@ -1,10 +1,10 @@
+soundText = ["Sound","Dźwięk"]
 soundOnText = ["ON","Włączony"]
 soundOffText = ["OFF","Wyłączony"]
 
 mainMenuText = ["Main Menu","Menu Główne"]
 languageText = ["Language","Język"]
 keybindsText = ["Keybinds","Sterowanie"]
-soundText = ["Sound","Dźwięk"]
 
 difficultyText = ["Difficulty","Poziom Trudności"]
 difficultyEasy = ["Easy","Łatwy"]
@@ -19,3 +19,11 @@ exitText = ["Exit","Wyjdź"]
 
 gameOverText = ["Game Over","Koniec Gry"]
 gameOverInfoText = ["press any key to exit the game","Dowolni klawisz wyjdze z gry"]
+keybindsWASD = ["WASD model","model WASD"]
+keybindsArrows = ["Arrows","Strzałki"]
+spacebarText = ["Spacebar","Spacja"]
+shootText = ["Shoot","Strzelanie"]
+movementText = ["Movement","Poruszanie Się"]
+
+playerText = ["Player","Gracz"]
+scoreText = ["Score","Wynik"]

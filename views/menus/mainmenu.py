@@ -4,6 +4,7 @@ import arcade
 import utils.globals
 import utils.views
 import utils.menusFunctions
+import database.dbfuns
 
 
 
@@ -20,7 +21,14 @@ class MainMenu(arcade.View):
         self.screen_header_x = 300
         self.screen_header_y = 450
         self.setup()
-        
+        if(database.dbfuns.conn == None):
+                database.dbfuns.connectDB()
+        ##one time init - if needed - delete file to reset and run this
+        # database.dbfuns.createTable()
+        # database.dbfuns.insertValues('-----', 0)
+        # database.dbfuns.insertValues('-----', 0)
+        # database.dbfuns.insertValues('-----', 0)
+        # database.dbfuns.saveChanges()
         
 
     def set_button_textures(self):
@@ -79,6 +87,7 @@ class PlayButton(TextButton):
     def on_release(self):
         if self.pressed:
             self.pressed = False
+            
             utils.globals.WINDOW.show_view(utils.views.game_view)
             # self.game.pause = False
 
@@ -97,7 +106,7 @@ class OptionsButton(TextButton):
 
     def on_release(self):
         if self.pressed:
-            self.pressed = False 
+            self.pressed = False
             utils.globals.WINDOW.show_view(utils.views.options_view)
     
     def update(self):
@@ -115,6 +124,10 @@ class LeaderboardButton(TextButton):
     def on_release(self):
         if self.pressed:
             self.pressed = False
+            
+
+            database.dbfuns.selectScores()
+            utils.globals.WINDOW.show_view(utils.views.leaderboard_view)
     
     def update(self):
         super().__init__(self.center_x, self.center_y, self.width, self.height, text=utils.languagePack.leaderboardText[utils.menusFunctions.currentLanguage], theme=self.theme)
@@ -130,6 +143,7 @@ class ExitButton(TextButton):
     def on_release(self):
         if self.pressed:
             self.pressed = False
+            database.dbfuns.closeConnection()
             arcade.close_window()
     
     def update(self):

@@ -65,6 +65,11 @@ class Options(arcade.View):
         arcade.draw_text(self.screen_header, self.screen_header_x, self.screen_header_y, arcade.color.ALICE_BLUE, self.screen_header_font_size, align="center", anchor_x="center", anchor_y="center")
         [button.draw() for button in self.button_list]
 
+    def on_update(self, delta_time):
+        self.updateText()
+
+    def updateText(self):
+        self.screen_header = utils.languagePack.optionsText[utils.menusFunctions.currentLanguage]
 
 
 class DifficultyButton(TextButton):
