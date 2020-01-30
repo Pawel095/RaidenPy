@@ -30,15 +30,15 @@ class Options(arcade.View):
 
     def setup_theme(self):
         self.theme = Theme()
-        self.theme.set_font(24, arcade.color.WHITE)
+        self.theme.set_font(20, arcade.color.WHITE)
         self.set_button_textures()
 
     def set_buttons(self):
-        diffButton = DifficultyButton(self, 300, 380, 190, 50, theme=self.theme)
-        soundButton = SoundButton(self, 300, 310, 190, 50, theme=self.theme)
-        keysButton = KeyBindsButton(self, 300, 240, 190, 50, theme=self.theme)
-        langButton = LanguageButton(self, 300, 170, 190, 50, theme=self.theme)
-        menuButton = ReturnButton(self, 300, 95, 190, 50, theme=self.theme)
+        diffButton = DifficultyButton(self, 300, 380, 240, 50, theme=self.theme)
+        soundButton = SoundButton(self, 300, 310, 240, 50, theme=self.theme)
+        keysButton = KeyBindsButton(self, 300, 240, 240, 50, theme=self.theme)
+        langButton = LanguageButton(self, 300, 170, 240, 50, theme=self.theme)
+        menuButton = ReturnButton(self, 300, 95, 240, 50, theme=self.theme)
         self.button_list.append(diffButton)
         self.button_list.append(soundButton)
         self.button_list.append(keysButton)
