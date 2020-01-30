@@ -22,3 +22,6 @@ keybindsArrows = ["Arrows","Strzałki"]
 spacebarText = ["Spacebar","Spacja"]
 shootText = ["Shoot","Strzelanie"]
 movementText = ["Movement","Poruszanie Się"]
+
+playerText = ["Player","Gracz"]
+scoreText = ["Score","Wynik"]
