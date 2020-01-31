@@ -8,7 +8,7 @@ import utils.globals
 from utils.utilFunctions import isRemoveable
 from utils.loader import assets
 from utils.globals import enemyBullets, playerBullets, enemies, explosions, getPlayerKills
-from utils.menusFunctions import getSoundState, languageList, getCurrLang, getCurrDiff, difficultyList
+from utils.menusFunctions import getSoundState, languageList, getCurrLang, getCurrDiff, difficultyList, getCurrKeybinds
 from utils.languagePack import gameOverText, gameOverInfoText
 import time
 from database.dbfuns import insertValues, saveChanges, closeConnection
@@ -156,14 +156,24 @@ class GameView(arcade.View):
         if self.gameOver and self.gameOverTimer+self.gameOverTextTime < self.uptime:
             arcade.close_window()
 
-        if key == arcade.key.LEFT:
-            self.flags.left = True
-        if key == arcade.key.RIGHT:
-            self.flags.right = True
-        if key == arcade.key.UP:
-            self.flags.up = True
-        if key == arcade.key.DOWN:
-            self.flags.down = True
+        if getCurrKeybinds() == 1:
+            if key == arcade.key.A:
+                self.flags.left = True
+            if key == arcade.key.D:
+                self.flags.right = True
+            if key == arcade.key.W:
+                self.flags.up = True
+            if key == arcade.key.S:
+                self.flags.down = True
+        else:
+            if key == arcade.key.LEFT:
+                self.flags.left = True
+            if key == arcade.key.RIGHT:
+                self.flags.right = True
+            if key == arcade.key.UP:
+                self.flags.up = True
+            if key == arcade.key.DOWN:
+                self.flags.down = True
 
         if key == arcade.key.SPACE:
             self.flags.space = True
@@ -173,14 +183,24 @@ class GameView(arcade.View):
 
     def on_key_release(self, key, modifiers):
         """ Called whenever a user releases a key. """
-        if key == arcade.key.LEFT:
-            self.flags.left = False
-        if key == arcade.key.RIGHT:
-            self.flags.right = False
-        if key == arcade.key.UP:
-            self.flags.up = False
-        if key == arcade.key.DOWN:
-            self.flags.down = False
+        if getCurrKeybinds() == 1:
+            if key == arcade.key.A:
+                self.flags.left = False
+            if key == arcade.key.D:
+                self.flags.right = False
+            if key == arcade.key.W:
+                self.flags.up = False
+            if key == arcade.key.S:
+                self.flags.down = False
+        else:
+            if key == arcade.key.LEFT:
+                self.flags.left = False
+            if key == arcade.key.RIGHT:
+                self.flags.right = False
+            if key == arcade.key.UP:
+                self.flags.up = False
+            if key == arcade.key.DOWN:
+                self.flags.down = False
 
         if key == arcade.key.SPACE:
             self.flags.space = False

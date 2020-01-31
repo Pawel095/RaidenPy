@@ -39,6 +39,10 @@ def getCurrLang():
     return currentLanguage
 
 
+def getCurrKeybinds():
+    return keybindsPresets[currentBinds]
+
+
 # turn sound on/off + change text
 def toggleSound():
     global soundState
@@ -146,4 +150,3 @@ def keybindsLang():
         bindsText = utils.languagePack.keybindsArrows[currentLanguage]
     elif(currentBinds == 1):
         bindsText = utils.languagePack.keybindsWASD[currentLanguage]
-
