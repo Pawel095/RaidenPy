@@ -23,12 +23,6 @@ class MainMenu(arcade.View):
         self.setup()
         if(database.dbfuns.conn == None):
                 database.dbfuns.connectDB()
-        # #one time init - if needed - delete file to reset and run this
-        # database.dbfuns.createTable()
-        # database.dbfuns.insertValues('-----', 0)
-        # database.dbfuns.insertValues('-----', 0)
-        # database.dbfuns.insertValues('-----', 0)
-        # database.dbfuns.saveChanges()
         
 
     def set_button_textures(self):
