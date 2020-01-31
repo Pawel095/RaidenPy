@@ -20,11 +20,11 @@ exitText = ["Exit", "Wyjdź"]
 gameOverText = ["Game Over", "Koniec Gry"]
 gameOverInfoText = ["press any key to exit the game",
                     "Dowolny klawisz wyjdze z gry"]
-keybindsWASD = ["WASD model", "model WASD"]
+keybindsWASD = ["WASD model", "Model WASD"]
 keybindsArrows = ["Arrows", "Strzałki"]
 spacebarText = ["Spacebar", "Spacja"]
 shootText = ["Shoot", "Strzelanie"]
-movementText = ["Movement", "Poruszanie Się"]
+movementText = ["Movement", "Poruszanie się"]
 
 playerText = ["Player", "Gracz"]
 scoreText = ["Score", "Wynik"]
