@@ -73,7 +73,7 @@ class SetName(arcade.View):
     def on_key_press(self, key, modifiers):
         global nickname
         super().on_key_press(key, modifiers)
-        if key >= 32 and key <= 126:
+        if key >= 32 and key <= 126 or key == arcade.key.BACKSPACE:
             self.input.update(0, key)
         nickname = self.input.text_storage.text
         self.text = self.input.text_storage.text
