@@ -25,6 +25,7 @@ def createTable():
     c.execute('INSERT into leaderboard values (?, ?)', ('-----', 0))
     c.execute('INSERT into leaderboard values (?, ?)', ('-----', 0))
     c.execute('INSERT into leaderboard values (?, ?)', ('-----', 0))
+    saveChanges()
 
 
 def saveChanges():
