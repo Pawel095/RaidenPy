@@ -13,7 +13,7 @@ for r, d, f in os.walk(path):
     for file in f:
         files.append(os.path.join(r, file))
 
-args = ["pyinstaller", "-F"]
+args = ["pyinstaller", "-F",'-w']
 args.append("main.py")
 print(args)
 subprocess.call(args)
