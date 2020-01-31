@@ -15,12 +15,16 @@ def connectDB():
     res = c.fetchone()
     if res is None:
         createTable()
-    c = conn.cursor()
+
+
 
 
 def createTable():
     c.execute('''CREATE TABLE leaderboard
              (playername text, score integer)''')
+    c.execute('INSERT into leaderboard values (?, ?)', ('-----', 0))
+    c.execute('INSERT into leaderboard values (?, ?)', ('-----', 0))
+    c.execute('INSERT into leaderboard values (?, ?)', ('-----', 0))
 
 
 def saveChanges():
