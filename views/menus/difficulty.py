@@ -12,8 +12,8 @@ class DifficultyOptionsView(arcade.View):
         super().__init__()    
         self.theme = None
         self.background = None
-        self.screen_header = "Difficulty Level"
-        self.screen_header_font_size = 60
+        self.screen_header = "Difficulty"
+        self.screen_header_font_size = 50
         self.screen_header_x = 300
         self.screen_header_y = 450
         self.setup()
