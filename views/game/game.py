@@ -24,7 +24,7 @@ class GameView(arcade.View):
         self.background = Background()
 
         self.lastShotTime = 0
-        self.bulletDelay = 0.2
+        self.bulletDelay = 0.4
 
         self.lastEnemySpawnTime = 0
         self.enemySpawnDelay = 2
@@ -37,7 +37,7 @@ class GameView(arcade.View):
         self.gameOver = False
 
         self.lastScoreUpdateTime = 0
-        self.lastScoreUpdateDelay = 0.1  # random.randint(1, 10)*0.1
+        self.lastScoreUpdateDelay = 0.4
         self.score = 0
         self.textScore = "0000000000"
 
@@ -142,7 +142,7 @@ class GameView(arcade.View):
                 del b
 
         # update score
-       if not self.gameOver:
+        if not self.gameOver:
             if self.lastScoreUpdateTime + self.lastScoreUpdateDelay < self.uptime:
                 self.score = int(self.uptime*1000+getPlayerKills()*10000)
                 self.textScore = str(self.score).zfill(10)
