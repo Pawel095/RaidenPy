@@ -6,7 +6,7 @@ from views.game.explosion import Explosion
 from utils.menusFunctions import getSoundState
 
 class Player(arcade.Sprite):
-    def __init__(self, speed=10, slowModifier=0.1,  scale=0.5):
+    def __init__(self, speed=10, slowModifier=0.1,  scale=0.7):
         super().__init__(None)
         self.set_position(100, 100)
         self.speed = speed

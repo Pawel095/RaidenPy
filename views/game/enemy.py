@@ -1,7 +1,7 @@
 import arcade
 from views.game.bullet import Bullet
 from views.game.explosion import Explosion
-from utils.globals import enemyBullets, explosions
+from utils.globals import enemyBullets, explosions, addOneToPlayerKills
 from utils.loader import assets
 import random
 from utils.utilFunctions import getDist, approach, clamp
@@ -15,12 +15,12 @@ class Enemy(arcade.Sprite):
 
     def __init__(self, player, scale=1):
         super().__init__(None)
-        self.texture = assets["enemy"+str(random.randint(1,3))]
+        self.texture = assets["enemy"+str(random.randint(1, 3))]
         self.player = player
 
         self.hp = 2
 
-        self.firstShootingSwitch=True
+        self.firstShootingSwitch = True
         self.lastShotTime = 0
         self.shotCooldown = 2
 
@@ -55,15 +55,15 @@ class Enemy(arcade.Sprite):
         if not self.goingAway:
             if getDist(self.position, self.target) < 70:
                 if self.firstShootingSwitch:
-                    self.firstShootingSwitch=False
-                    self.lastShotTime=uptime
+                    self.firstShootingSwitch = False
+                    self.lastShotTime = uptime
                 # stój i strzelaj,obracając się w strone gracza
 
                 pX = (self.player.position[0]-self.position[0])
                 pY = (self.player.position[1]-self.position[1])
                 pAngle = math.atan2(pY, pX)
                 targetAngle = math.degrees(pAngle)-90
-                
+
                 if self.lastShotTime+self.shotCooldown < uptime:
                     self.lastShotTime = uptime
                     bX = math.cos(pAngle)
@@ -113,14 +113,15 @@ class Enemy(arcade.Sprite):
     def kill(self):
         explosions.append(Explosion(self.position, scale=3))
         if getSoundState():
-            arcade.play_sound(assets["death"+str(random.randint(1,3))])
+            arcade.play_sound(assets["death"+str(random.randint(1, 3))])
+        addOneToPlayerKills()
         super().kill()
 
     def goAway(self, uptime):
         self.speed = 1
         self.goAwayTimer = uptime
         self.goingAway = True
-        self.target=[random.randint(-100,700),900]
+        self.target = [random.randint(-100, 700), 900]
 
     def draw(self):
         if self.blinkStatus:

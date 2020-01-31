@@ -6,6 +6,7 @@ from views.menus.language import LanguageOptionsView
 from views.menus.keybinds import KeybindsOptionsView
 from views.menus.difficulty import DifficultyOptionsView
 from views.menus.leaderboard import LeaderboardView
+from views.menus.setName import SetName
 
 
 game_view = GameView()
@@ -16,4 +17,4 @@ language_view = LanguageOptionsView()
 keybinds_view = KeybindsOptionsView()
 difficulty_view = DifficultyOptionsView()
 leaderboard_view = LeaderboardView()
-
+setName_view = SetName()

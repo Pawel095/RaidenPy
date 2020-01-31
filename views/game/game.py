@@ -7,10 +7,12 @@ from views.game.background import Background
 import utils.globals
 from utils.utilFunctions import isRemoveable
 from utils.loader import assets
-from utils.globals import enemyBullets, playerBullets, enemies, explosions
+from utils.globals import enemyBullets, playerBullets, enemies, explosions, getPlayerKills
 from utils.menusFunctions import getSoundState, languageList, getCurrLang, getCurrDiff, difficultyList
 from utils.languagePack import gameOverText, gameOverInfoText
 import time
+from database.dbfuns import insertValues, saveChanges, closeConnection
+import random
 
 
 class GameView(arcade.View):
@@ -34,6 +36,21 @@ class GameView(arcade.View):
         self.gameOverTextTime = 1
         self.gameOver = False
 
+        self.lastScoreUpdateTime = 0
+        self.lastScoreUpdateDelay = 0.1  # random.randint(1, 10)*0.1
+        self.score = 0
+        self.textScore = "0000000000"
+
+    def setNickname(self, name):
+        self.playerName = name
+
+    def on_gameOver(self):
+        if self.playerName == "":
+            self.playerName = "Anon"
+        insertValues(self.playerName, self.score)
+        saveChanges()
+        closeConnection()
+
     def on_show(self):
         arcade.set_background_color(arcade.color.BLACK)
         # arcade.play_sound(assets["defcon0"])
@@ -42,11 +59,14 @@ class GameView(arcade.View):
     def on_draw(self):
         arcade.start_render()
         self.background.draw()
-        self.player.draw()
         [b.draw() for b in enemyBullets]
         [b.draw() for b in playerBullets]
         [e.draw() for e in enemies]
+        self.player.draw()
         explosions.draw()
+
+        arcade.draw_text(self.textScore, 10, 570, arcade.color.WHITE,
+                         20, align="center")
 
         if self.gameOver and self.gameOverTimer+self.gameOverTextTime < self.uptime:
             arcade.draw_text(gameOverText[getCurrLang()], 300, 420, arcade.color.WHITE_SMOKE, font_size=40,
@@ -85,6 +105,8 @@ class GameView(arcade.View):
                     for e in enemies:
                         e.goAway(self.uptime)
                     self.gameOver = True
+                    if self.gameOverTimer == 0:
+                        self.on_gameOver()
                     self.gameOverTimer = self.uptime
 
         # enemies are shot?
@@ -99,7 +121,8 @@ class GameView(arcade.View):
         if self.flags.space and not self.gameOver:
             if (self.lastShotTime+self.bulletDelay < self.uptime):
                 self.lastShotTime = self.uptime
-                playerBullets.append(Bullet(self.player.position, 0, 10, 90))
+                playerBullets.append(
+                    Bullet(self.player.position, 0, 10, 90))
 
         # spawn enemies
         if self.lastEnemySpawnTime+self.enemySpawnDelay < self.uptime:
@@ -111,18 +134,25 @@ class GameView(arcade.View):
             if not isRemoveable(b.position):
                 enemyBullets.remove(b)
                 del b
+
         # remove old player bullets
         for b in playerBullets:
             if not isRemoveable(b.position):
                 playerBullets.remove(b)
                 del b
 
+        # update score
+        if self.lastScoreUpdateTime + self.lastScoreUpdateDelay < self.uptime:
+            self.score = int(self.uptime*1000+getPlayerKills()*10000)
+            self.textScore = str(self.score).zfill(10)
+            self.lastScoreUpdateTime = self.uptime
+
     def on_mouse_press(self, _x, _y, _button, _modifiers):
         pass
 
     def on_key_press(self, key, modifiers):
         """ Called whenever the user presses a key. """
-        if self.gameOver and self.gameOverTimer+self.gameOverTextTime<self.uptime:
+        if self.gameOver and self.gameOverTimer+self.gameOverTextTime < self.uptime:
             arcade.close_window()
 
         if key == arcade.key.LEFT:

@@ -23,7 +23,7 @@ class MainMenu(arcade.View):
         self.setup()
         if(database.dbfuns.conn == None):
                 database.dbfuns.connectDB()
-        ##one time init - if needed - delete file to reset and run this
+        # #one time init - if needed - delete file to reset and run this
         # database.dbfuns.createTable()
         # database.dbfuns.insertValues('-----', 0)
         # database.dbfuns.insertValues('-----', 0)
@@ -88,7 +88,7 @@ class PlayButton(TextButton):
         if self.pressed:
             self.pressed = False
             
-            utils.globals.WINDOW.show_view(utils.views.game_view)
+            utils.globals.WINDOW.show_view(utils.views.setName_view)
             # self.game.pause = False
 
     def update(self):

@@ -31,3 +31,13 @@ enemyBullets = arcade.SpriteList()
 playerBullets = arcade.SpriteList()
 enemies = arcade.SpriteList()
 explosions = arcade.SpriteList()
+playerKills = 0
+
+
+def getPlayerKills():
+    return playerKills
+
+
+def addOneToPlayerKills():
+    global playerKills
+    playerKills += 1
