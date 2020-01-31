@@ -40,15 +40,15 @@ class KeybindsOptionsView(arcade.View):
     def setup_theme(self):
         self.theme = Theme()
         self.themeDisabled = Theme()
-        self.theme.set_font(24, arcade.color.WHITE)
-        self.themeDisabled.set_font(24, arcade.color.WHITE)
+        self.theme.set_font(20, arcade.color.WHITE)
+        self.themeDisabled.set_font(20, arcade.color.WHITE)
         self.set_button_textures()
         self.set_button_textures_disabled()
 
     def set_buttons(self):
-        mvButton = MovementButton(self, 400, 380, 190, 50, theme=self.theme)
-        shootButton = ShootButton(self, 400, 310, 190, 50, theme=self.themeDisabled)
-        optionsButton = ReturnButton(self, 300, 240, 190, 50, theme=self.theme)
+        mvButton = MovementButton(self, 450, 380, 240, 50, theme=self.theme)
+        shootButton = ShootButton(self, 450, 310, 240, 50, theme=self.themeDisabled)
+        optionsButton = ReturnButton(self, 300, 240, 240, 50, theme=self.theme)
 
         self.button_list.append(mvButton)
         self.button_list.append(shootButton)
@@ -70,8 +70,8 @@ class KeybindsOptionsView(arcade.View):
         arcade.draw_texture_rectangle(utils.globals.SCREEN_WIDTH // 2, utils.globals.SCREEN_HEIGHT // 2,
                                       utils.globals.SCREEN_WIDTH, utils.globals.SCREEN_HEIGHT, self.background)
         arcade.draw_text(self.screen_header, self.screen_header_x, self.screen_header_y, arcade.color.ALICE_BLUE, self.screen_header_font_size, align="center", anchor_x="center", anchor_y="center")
-        arcade.draw_text(utils.languagePack.movementText[utils.menusFunctions.currentLanguage], 200, 380, arcade.color.ALICE_BLUE, 28, align="center", anchor_x="center", anchor_y="center")
-        arcade.draw_text(utils.languagePack.shootText[utils.menusFunctions.currentLanguage], 200, 310, arcade.color.ALICE_BLUE, 28, align="center", anchor_x="center", anchor_y="center")
+        arcade.draw_text(utils.languagePack.movementText[utils.menusFunctions.currentLanguage], 150, 380, arcade.color.ALICE_BLUE, 28, align="center", anchor_x="center", anchor_y="center")
+        arcade.draw_text(utils.languagePack.shootText[utils.menusFunctions.currentLanguage], 150, 310, arcade.color.ALICE_BLUE, 28, align="center", anchor_x="center", anchor_y="center")
         [button.draw() for button in self.button_list]
 
     def on_update(self, delta_time):

@@ -28,12 +28,12 @@ class DifficultyOptionsView(arcade.View):
 
     def setup_theme(self):
         self.theme = Theme()
-        self.theme.set_font(24, arcade.color.WHITE)
+        self.theme.set_font(20, arcade.color.WHITE)
         self.set_button_textures()
 
     def set_buttons(self):
-        diffLevelButton = DifficultySwap(self, 300, 335, 190, 50, theme=self.theme)
-        optionsButton = ReturnButton(self, 300, 240, 190, 50, theme=self.theme)
+        diffLevelButton = DifficultySwap(self, 300, 335, 240, 50, theme=self.theme)
+        optionsButton = ReturnButton(self, 300, 240, 240, 50, theme=self.theme)
         
         self.button_list.append(diffLevelButton)
         self.button_list.append(optionsButton)

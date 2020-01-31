@@ -29,12 +29,12 @@ class LeaderboardView(arcade.View):
 
     def setup_theme(self):
         self.theme = Theme()
-        self.theme.set_font(24, arcade.color.WHITE)
+        self.theme.set_font(20, arcade.color.WHITE)
         self.set_button_textures()
 
     def set_buttons(self):
         
-        optionsButton = ReturnButton(self, 300, 210, 190, 50, theme=self.theme)
+        optionsButton = ReturnButton(self, 300, 210, 240, 50, theme=self.theme)
 
         self.button_list.append(optionsButton)
 

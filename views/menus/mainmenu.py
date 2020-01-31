@@ -9,6 +9,7 @@ import database.dbfuns
 
 
 
+
 class MainMenu(arcade.View):
     def on_show(self):
         arcade.set_background_color(arcade.color.BLACK)
@@ -34,14 +35,14 @@ class MainMenu(arcade.View):
 
     def setup_theme(self):
         self.theme = Theme()
-        self.theme.set_font(24, arcade.color.WHITE)
+        self.theme.set_font(20, arcade.color.WHITE)
         self.set_button_textures()
 
     def set_buttons(self):
-        playButton = PlayButton(self, 300, 380, 190, 50, theme=self.theme)
-        optionsButton = OptionsButton(self, 300, 310, 190, 50, theme=self.theme)
-        leaderboardButton = LeaderboardButton(self, 300, 240, 190, 50, theme=self.theme)
-        exitButton = ExitButton(self, 300, 170, 190, 50, theme=self.theme)
+        playButton = PlayButton(self, 300, 380, 240, 50, theme=self.theme)
+        optionsButton = OptionsButton(self, 300, 310, 240, 50, theme=self.theme)
+        leaderboardButton = LeaderboardButton(self, 300, 240, 240, 50, theme=self.theme)
+        exitButton = ExitButton(self, 300, 170, 240, 50, theme=self.theme)
 
         self.button_list.append(playButton)
         self.button_list.append(optionsButton)
