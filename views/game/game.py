@@ -142,10 +142,11 @@ class GameView(arcade.View):
                 del b
 
         # update score
-        if self.lastScoreUpdateTime + self.lastScoreUpdateDelay < self.uptime:
-            self.score = int(self.uptime*1000+getPlayerKills()*10000)
-            self.textScore = str(self.score).zfill(10)
-            self.lastScoreUpdateTime = self.uptime
+       if not self.gameOver:
+            if self.lastScoreUpdateTime + self.lastScoreUpdateDelay < self.uptime:
+                self.score = int(self.uptime*1000+getPlayerKills()*10000)
+                self.textScore = str(self.score).zfill(10)
+                self.lastScoreUpdateTime = self.uptime
 
     def on_mouse_press(self, _x, _y, _button, _modifiers):
         pass
