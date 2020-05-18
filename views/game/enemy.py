@@ -5,9 +5,7 @@ from utils.globals import enemyBullets, explosions, addOneToPlayerKills
 from utils.loader import assets
 import random
 from utils.utilFunctions import getDist, approach, clamp
-from utils.menusFunctions import getCurrDiff
 import math
-from utils.menusFunctions import getSoundState
 
 
 class Enemy(arcade.Sprite):
@@ -15,7 +13,7 @@ class Enemy(arcade.Sprite):
 
     def __init__(self, player, scale=1):
         super().__init__(None)
-        self.texture = assets["enemy"+str(random.randint(1, 3))]
+        self.texture = assets["enemy" + str(random.randint(1, 3))]
         self.player = player
 
         self.hp = 2
@@ -25,7 +23,7 @@ class Enemy(arcade.Sprite):
         self.shotCooldown = 2
 
         self.lastBlinkTriggerTime = 0
-        self.blinkTime = 0.5+(0.1*getCurrDiff())
+        self.blinkTime = 0.5
         self.blinkStatus = False
         self._blinker = 0
 
@@ -40,13 +38,11 @@ class Enemy(arcade.Sprite):
         # self.position = [300,300]
 
         self.lookDirection = 0
-        self.speed = 10+(4*getCurrDiff())
-        self.bulletSpeed = 5 + (2*getCurrDiff())
+        self.speed = 10
+        self.bulletSpeed = 5
 
-        self.maxDistX = math.sqrt(
-            math.pow(self.position[0]-self.target[0], 2))+1e-3
-        self.maxDistY = math.sqrt(
-            math.pow(self.position[1]-self.target[1], 2))+1e-3
+        self.maxDistX = math.sqrt(math.pow(self.position[0] - self.target[0], 2)) + 1e-3
+        self.maxDistY = math.sqrt(math.pow(self.position[1] - self.target[1], 2)) + 1e-3
 
     def update(self, uptime):
         speedX = 0
@@ -59,43 +55,50 @@ class Enemy(arcade.Sprite):
                     self.lastShotTime = uptime
                 # stój i strzelaj,obracając się w strone gracza
 
-                pX = (self.player.position[0]-self.position[0])
-                pY = (self.player.position[1]-self.position[1])
+                pX = self.player.position[0] - self.position[0]
+                pY = self.player.position[1] - self.position[1]
                 pAngle = math.atan2(pY, pX)
-                targetAngle = math.degrees(pAngle)-90
+                targetAngle = math.degrees(pAngle) - 90
 
-                if self.lastShotTime+self.shotCooldown < uptime:
+                if self.lastShotTime + self.shotCooldown < uptime:
                     self.lastShotTime = uptime
                     bX = math.cos(pAngle)
                     bY = math.sin(pAngle)
 
                     enemyBullets.append(
-                        Bullet(self.position, bX*self.bulletSpeed, bY*self.bulletSpeed, angle=math.degrees(pAngle)-90, color="r"))
+                        Bullet(
+                            self.position,
+                            bX * self.bulletSpeed,
+                            bY * self.bulletSpeed,
+                            angle=math.degrees(pAngle) - 90,
+                            color="r",
+                        )
+                    )
             else:
                 # leć do target
-                wX = self.target[0]-self.position[0]
-                wY = self.target[1]-self.position[1]
+                wX = self.target[0] - self.position[0]
+                wY = self.target[1] - self.position[1]
 
-                targetAngle = math.degrees(math.atan2(wY, wX))-90
+                targetAngle = math.degrees(math.atan2(wY, wX)) - 90
 
-                speedX = (wX/self.maxDistX)*self.speed
-                speedY = (wY/self.maxDistY)*self.speed
+                speedX = (wX / self.maxDistX) * self.speed
+                speedY = (wY / self.maxDistY) * self.speed
         else:
             targetAngle = self.angle
-            if self.turnSeconds+self.goAwayTimer < uptime:
-                wX = self.target[0]-self.position[0]
-                wY = self.target[1]-self.position[1]
-                targetAngle = math.degrees(math.atan2(wY, wX))-90
+            if self.turnSeconds + self.goAwayTimer < uptime:
+                wX = self.target[0] - self.position[0]
+                wY = self.target[1] - self.position[1]
+                targetAngle = math.degrees(math.atan2(wY, wX)) - 90
 
-            if self.goAwayWaitSeconds+self.goAwayTimer < uptime:
-                speedX = (wX/self.maxDistX)*self.speed
-                speedY = (wY/self.maxDistY)*self.speed
+            if self.goAwayWaitSeconds + self.goAwayTimer < uptime:
+                speedX = (wX / self.maxDistX) * self.speed
+                speedY = (wY / self.maxDistY) * self.speed
 
         self.change_x = approach(self.change_x, speedX, 0.1)
         self.change_y = approach(self.change_y, speedY, 0.1)
         self.angle = approach(self.angle, targetAngle, 0.1)
 
-        if self.blinkTime+self.lastBlinkTriggerTime < uptime:
+        if self.blinkTime + self.lastBlinkTriggerTime < uptime:
             self.blinkStatus = False
             self._blinker = 0
 
@@ -112,8 +115,7 @@ class Enemy(arcade.Sprite):
 
     def kill(self):
         explosions.append(Explosion(self.position, scale=3))
-        if getSoundState():
-            arcade.play_sound(assets["death"+str(random.randint(1, 3))])
+        arcade.play_sound(assets["death" + str(random.randint(1, 3))])
         addOneToPlayerKills()
         super().kill()
 

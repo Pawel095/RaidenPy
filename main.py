@@ -2,17 +2,18 @@ import arcade
 from views.game.game import GameView
 from utils.globals import WIDTH, HEIGHT
 import utils.globals
+import utils.views
 from utils.loader import Loader
-from utils.views import main_menu
 
 
 def main():
     utils.globals.WINDOW = arcade.Window(
-        utils.globals.WIDTH, utils.globals.HEIGHT, utils.globals.TITLE)
+        utils.globals.WIDTH, utils.globals.HEIGHT, utils.globals.TITLE
+    )
     l = Loader()
     l.load()
 
-    utils.globals.WINDOW.show_view(utils.views.main_menu)
+    utils.globals.WINDOW.show_view(utils.views.game_view)
     arcade.run()
 
 

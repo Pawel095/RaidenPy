@@ -1,29 +1,28 @@
 import arcade
-from utils.utilFunctions import approach,clampToScreen
+from utils.utilFunctions import approach, clampToScreen
 from utils.loader import assets
-from utils.globals import explosions,enemies
+from utils.globals import explosions, enemies
 from views.game.explosion import Explosion
-from utils.menusFunctions import getSoundState
+
 
 class Player(arcade.Sprite):
-    def __init__(self, speed=10, slowModifier=0.1,  scale=0.7):
+    def __init__(self, speed=10, slowModifier=0.1, scale=0.7):
         super().__init__(None)
         self.set_position(100, 100)
         self.speed = speed
         self.collision_radius = 100
         self.texture = assets["player"]
         self.scale = scale
-        self.alive=True
+        self.alive = True
 
     def draw(self):
         if self.alive:
             super().draw()
-    
+
     def onHit(self):
-        self.alive=False
-        if getSoundState():
-            arcade.play_sound(assets["playerDeath"])
-        explosions.append(Explosion(self.position,2))
+        self.alive = False
+        arcade.play_sound(assets["playerDeath"])
+        explosions.append(Explosion(self.position, 2))
 
     def update(self, flags):
         if self.alive:

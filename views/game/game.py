@@ -7,11 +7,14 @@ from views.game.background import Background
 import utils.globals
 from utils.utilFunctions import isRemoveable
 from utils.loader import assets
-from utils.globals import enemyBullets, playerBullets, enemies, explosions, getPlayerKills
-from utils.menusFunctions import getSoundState, languageList, getCurrLang, getCurrDiff, difficultyList, getCurrKeybinds
-from utils.languagePack import gameOverText, gameOverInfoText
+from utils.globals import (
+    enemyBullets,
+    playerBullets,
+    enemies,
+    explosions,
+    getPlayerKills,
+)
 import time
-from database.dbfuns import insertValues, saveChanges, closeConnection
 import random
 
 
@@ -29,7 +32,7 @@ class GameView(arcade.View):
         self.lastEnemySpawnTime = 0
         self.enemySpawnDelay = 2
 
-        self.musicDuration = 1*60 + 10
+        self.musicDuration = 1 * 60 + 10
         self.musicTimer = -7777
 
         self.gameOverTimer = 0
@@ -45,16 +48,11 @@ class GameView(arcade.View):
         self.playerName = name
 
     def on_gameOver(self):
-        if self.playerName == "":
-            self.playerName = "Anon"
-        insertValues(self.playerName, self.score)
-        saveChanges()
-        closeConnection()
+        pass
 
     def on_show(self):
         arcade.set_background_color(arcade.color.BLACK)
-        # arcade.play_sound(assets["defcon0"])
-        self.enemySpawnDelay = 2.5-(0.5*getCurrDiff())
+        self.enemySpawnDelay = 2.5
         self.uptime = 0
 
     def on_draw(self):
@@ -66,23 +64,39 @@ class GameView(arcade.View):
         self.player.draw()
         explosions.draw()
 
-        arcade.draw_text(self.textScore, 10, 570, arcade.color.WHITE,
-                         20, align="center")
+        arcade.draw_text(
+            self.textScore, 10, 570, arcade.color.WHITE, 20, align="center"
+        )
 
-        if self.gameOver and self.gameOverTimer+self.gameOverTextTime < self.uptime:
-            arcade.draw_text(gameOverText[getCurrLang()], 300, 420, arcade.color.WHITE_SMOKE, font_size=40,
-                             align="center", anchor_x="center", anchor_y="center")
-            arcade.draw_text(gameOverInfoText[getCurrLang()], 300, 250, arcade.color.WHITE_SMOKE,
-                             font_size=20, align="center", anchor_x="center", anchor_y="center")
+        if self.gameOver and self.gameOverTimer + self.gameOverTextTime < self.uptime:
+            arcade.draw_text(
+                "Game Over",
+                300,
+                420,
+                arcade.color.WHITE_SMOKE,
+                font_size=40,
+                align="center",
+                anchor_x="center",
+                anchor_y="center",
+            )
+            arcade.draw_text(
+                "U died",
+                300,
+                250,
+                arcade.color.WHITE_SMOKE,
+                font_size=20,
+                align="center",
+                anchor_x="center",
+                anchor_y="center",
+            )
 
     def on_update(self, deltaTime):
         self.uptime += deltaTime
 
         # play music if enabled
-        if getSoundState():
-            if self.musicDuration+self.musicTimer < self.uptime:
-                self.musicTimer = self.uptime
-                arcade.play_sound(assets["defcon0"])
+        if self.musicDuration + self.musicTimer < self.uptime:
+            self.musicTimer = self.uptime
+            arcade.play_sound(assets["defcon0"])
 
         self.background.update(deltaTime)
 
@@ -95,8 +109,7 @@ class GameView(arcade.View):
         [e.update(deltaTime) for e in explosions]
 
         # player is shot?
-        colided = arcade.check_for_collision_with_list(
-            self.player, enemyBullets)
+        colided = arcade.check_for_collision_with_list(self.player, enemyBullets)
         if len(colided) > 0:
             for c in colided:
                 c.kill()
@@ -120,13 +133,12 @@ class GameView(arcade.View):
 
         # player shoting
         if self.flags.space and not self.gameOver:
-            if (self.lastShotTime+self.bulletDelay < self.uptime):
+            if self.lastShotTime + self.bulletDelay < self.uptime:
                 self.lastShotTime = self.uptime
-                playerBullets.append(
-                    Bullet(self.player.position, 0, 10, 90))
+                playerBullets.append(Bullet(self.player.position, 0, 10, 90))
 
         # spawn enemies
-        if self.lastEnemySpawnTime+self.enemySpawnDelay < self.uptime:
+        if self.lastEnemySpawnTime + self.enemySpawnDelay < self.uptime:
             enemies.append(Enemy(self.player))
             self.lastEnemySpawnTime = self.uptime
 
@@ -145,7 +157,7 @@ class GameView(arcade.View):
         # update score
         if not self.gameOver:
             if self.lastScoreUpdateTime + self.lastScoreUpdateDelay < self.uptime:
-                self.score = int(self.uptime*1000+getPlayerKills()*10000)
+                self.score = int(self.uptime * 1000 + getPlayerKills() * 10000)
                 self.textScore = str(self.score).zfill(10)
                 self.lastScoreUpdateTime = self.uptime
 
@@ -154,27 +166,17 @@ class GameView(arcade.View):
 
     def on_key_press(self, key, modifiers):
         """ Called whenever the user presses a key. """
-        if self.gameOver and self.gameOverTimer+self.gameOverTextTime < self.uptime:
+        if self.gameOver and self.gameOverTimer + self.gameOverTextTime < self.uptime:
             arcade.close_window()
 
-        if getCurrKeybinds() == 1:
-            if key == arcade.key.A:
-                self.flags.left = True
-            if key == arcade.key.D:
-                self.flags.right = True
-            if key == arcade.key.W:
-                self.flags.up = True
-            if key == arcade.key.S:
-                self.flags.down = True
-        else:
-            if key == arcade.key.LEFT:
-                self.flags.left = True
-            if key == arcade.key.RIGHT:
-                self.flags.right = True
-            if key == arcade.key.UP:
-                self.flags.up = True
-            if key == arcade.key.DOWN:
-                self.flags.down = True
+        if key == arcade.key.A:
+            self.flags.left = True
+        if key == arcade.key.D:
+            self.flags.right = True
+        if key == arcade.key.W:
+            self.flags.up = True
+        if key == arcade.key.S:
+            self.flags.down = True
 
         if key == arcade.key.SPACE:
             self.flags.space = True
@@ -184,24 +186,14 @@ class GameView(arcade.View):
 
     def on_key_release(self, key, modifiers):
         """ Called whenever a user releases a key. """
-        if getCurrKeybinds() == 1:
-            if key == arcade.key.A:
-                self.flags.left = False
-            if key == arcade.key.D:
-                self.flags.right = False
-            if key == arcade.key.W:
-                self.flags.up = False
-            if key == arcade.key.S:
-                self.flags.down = False
-        else:
-            if key == arcade.key.LEFT:
-                self.flags.left = False
-            if key == arcade.key.RIGHT:
-                self.flags.right = False
-            if key == arcade.key.UP:
-                self.flags.up = False
-            if key == arcade.key.DOWN:
-                self.flags.down = False
+        if key == arcade.key.A:
+            self.flags.left = False
+        if key == arcade.key.D:
+            self.flags.right = False
+        if key == arcade.key.W:
+            self.flags.up = False
+        if key == arcade.key.S:
+            self.flags.down = False
 
         if key == arcade.key.SPACE:
             self.flags.space = False

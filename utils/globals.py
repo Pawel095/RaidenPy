@@ -2,7 +2,7 @@ import arcade
 from utils.loader import Loader
 
 
-class keyFlags():
+class keyFlags:
     def __init__(self):
         self.left = False
         self.right = False

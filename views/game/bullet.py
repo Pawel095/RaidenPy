@@ -1,6 +1,5 @@
 import arcade
 from utils.loader import assets
-from utils.menusFunctions import getSoundState
 import random
 
 
@@ -10,15 +9,13 @@ class Bullet(arcade.Sprite):
         self.position = position
         self.change_x = speedX
         self.change_y = speedY
-        self.color = color
         self.angle = angle
         self.scale = scale
         if color == "b":
             self.texture = assets["laser1"]
         else:
             self.texture = assets["laser2"]
-        if getSoundState():
-            arcade.play_sound(assets["shot"+str(random.randint(1, 6))])
+        arcade.play_sound(assets["shot" + str(random.randint(1, 6))])
 
     def draw(self):
         super().draw()
