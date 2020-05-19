@@ -4,4 +4,4 @@ pyglet_ffmpeg2
 #dev
 rope
 black
-flake8exit
+flake8
